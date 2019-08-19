@@ -43,9 +43,10 @@ two_hearted = Beer.create(brewery_id: bells.id, name: "Two Hearted Ale", style: 
 defender = Beer.create(brewery_id: brooklyn.id, name: "Defender IPA", style: "API", additions: "", abv: 5.5)
 brooklyn_lager = Beer.create(brewery_id: brooklyn.id, name: "Brooklyn Lager", style: "Lager", additions: "", abv: 5.2)
 
-mb1 = ConsumerBeer.create(beer_id: oberon.id, consumer_id: matt.id, num_available: 6, size: 12, packaging: "bottle", exp_date: Date.new(2019,9,19))
+mb1 = ConsumerBeer.create(beer_id: oberon.id, consumer_id: matt.id, num_available: 6, size: 12, packaging: "bottle", exp_date: Date.new(2019,9,19), rating: 5)
 mb2 = ConsumerBeer.create(beer_id: yuengling_golden.id, consumer_id: matt.id, num_available: 1, size: 12, packaging: "bottle", exp_date: Date.new(2019,10,8))
 sb1 = ConsumerBeer.create(beer_id: defender.id, consumer_id: shane.id, num_available: 6, size: 12, packaging: "bottle", exp_date: Date.new(2019,9,30))
+sb2 = ConsumerBeer.create(beer_id: oberon.id, consumer_id: matt.id, num_available: 6, size: 12, packaging: "bottle", exp_date: Date.new(2019,9,19), rating: 2)
 
 
 puts "gettin' drunk"
