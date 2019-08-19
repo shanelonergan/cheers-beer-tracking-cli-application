@@ -12,12 +12,12 @@ class Brewery < ActiveRecord::Base
 
     def most_popular
         #returns the beer instance of the brewery's most bought beer
-        # self.sold_beer_count.sort_by {|beer, num_bought| num_bought}.last
+        self.sold_beer_count.sort_by {|beer, num_bought| num_bought}.last
     end
 
     def least_popular
         #returns the beer instance of brewery's least bought beer
-        # self.sold_beer_count.sort_by {|beer, num_bought| num_bought}.first
+        self.sold_beer_count.sort_by {|beer, num_bought| num_bought}.first
     end
 
     def highest_rated
