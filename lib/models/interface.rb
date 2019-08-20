@@ -49,6 +49,7 @@ class Interface
       menu.choice "Buy/drink some beer", -> {self.consumer.buy_drink_beer}
       menu.choice "See what others are drinking", -> {self.consumer.view_other_users}
       menu.choice "Explore breweries", -> {self.consumer.view_breweries}
+      menu.choice "Delete Account", -> {self.consumer.delete_account}
     end
   end
 

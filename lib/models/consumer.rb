@@ -198,4 +198,18 @@ class Consumer < ActiveRecord::Base
     end
 
 
+
+    # delete account
+
+    def delete_account
+        confirm = TTY::Prompt.new.select("Are you sure you want to delete your account?", ["Yes", "No"])
+        if confirm == "Yes"
+            ConsumerBeer.all.each do |cbeer|
+                cbeer.destroy if cbeer.consumer_id == self.id
+            end
+            self.destroy
+            puts "Sorry to see you go!"
+        end
+    end
+
 end
