@@ -84,7 +84,7 @@ class Consumer < ActiveRecord::Base
 
     def quick_stats
         #top 3: most drank, highest rated, breweries
-        puts "\nYour top three most drank beers:\n#{beer_consumption[0..2].join("\n")}\n\nYour top three highest rated beers:\n#{beer_ratings[0..2].join("\n")}\n\nYour top three breweries:\n#{print_brewery_frequency[0..2].join("\n")}"
+        puts "\nTop three most drank beers:\n#{beer_consumption[0..2].join("\n")}\n\nTop three highest rated beers:\n#{beer_ratings[0..2].join("\n")}\n\nTop three breweries:\n#{print_brewery_frequency[0..2].join("\n")}"
     end
 
     def full_beer_history
@@ -186,7 +186,16 @@ class Consumer < ActiveRecord::Base
         puts "🍻 Cheers! You now have #{current_beer.num_available} #{beer.name}s left 🍻"
     end
 
+    # see other users info
 
+    def view_other_users
+        other_user_name = TTY::Prompt.new.select("Which fellow drinker would you like to see more about?", Consumer.pluck(:name))
+        other_user = Consumer.find_by(name: other_user_name)
+        TTY::Prompt.new.select("What would you like to see about #{other_user_name}?") do |menu|
+            menu.choice "View #{other_user_name}'s fridge", -> {other_user.view_fridge}
+            menu.choice "View #{other_user_name}'s quick stats", -> {other_user.quick_stats}
+        end
+    end
 
 
 end
