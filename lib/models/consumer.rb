@@ -24,7 +24,7 @@ class Consumer < ActiveRecord::Base
 
     def view_fridge
         # display beers in a readable way with appropriate info
-        puts "look at all these yummy beers"
+        self.consumer_beers.each { |beer| puts "#{beer.num_available} #{beer.name.pluralize}" }
     end
 
     def beer_history
