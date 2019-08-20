@@ -10,6 +10,7 @@ class Consumer < ActiveRecord::Base
     def beer_history
         # what stats do we want to include?
         # probably need several methods
+        # this method will print out results of helper methods
     end
 
     def drink_beer_from_brewery(args)
