@@ -25,6 +25,8 @@ class Consumer < ActiveRecord::Base
             "Stout"])
             Consumer.create(name: name, age: age, location: location, gender: gender, favorite_style: favorite_style)
     end
+
+    # Beer Profile
     
     def beer_profile
         TTY::Prompt.new.select("What do you want to see?") do |menu|
@@ -85,20 +87,33 @@ class Consumer < ActiveRecord::Base
     end
 
 
-
-
-
+    #Acquire Beer
 
 
     def buy_drink_beer
         TTY::Prompt.new.select("Buy or drink beer?") do |menu|
-            menu.choice "Buy beer", -> {self.buy_beer}
+            menu.choice "Buy beer", -> {self.choose_beer_to_buy}
             menu.choice "Drink beer", -> {self.drink_beer_menu}
         end
     end
     
-    def buy_beer(beer, amount = 1)
+    def choose_beer_to_buy
         # add to num_available if ConsumerBeer instance exists or create new one
+        brewery_choice = TTY::Prompt.new.select("What brewery?", Brewery.pluck(:name))
+        beer_choice = TTY::Prompt.new.select("What beer?", Brewery.find_by(name: brewery_choice).beers.pluck(:name))
+        beer = Beer.find_by(name: beer_choice)
+        quantity = TTY::Prompt.new.ask("How many?").to_i
+        buy_beer(beer, quantity)
+    end
+
+    def buy_beer(chosen_beer, chosen_quantity)
+        #binding.pry
+        if !self.consumer_beers.find_by(beer_id: chosen_beer.id)
+            ConsumerBeer.create(beer_id: chosen_beer.id, consumer_id: self.id, num_available: chosen_quantity)
+        else
+            new_num = self.consumer_beers.find_by(beer_id: chosen_beer.id).num_available + chosen_quantity
+            self.consumer_beers.find_by(beer_id: chosen_beer.id).update(num_available: new_num)
+        end
     end
     
     def drink_beer_menu
