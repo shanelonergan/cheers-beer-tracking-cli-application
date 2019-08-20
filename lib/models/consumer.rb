@@ -84,18 +84,43 @@ class Consumer < ActiveRecord::Base
         puts "#{beer_consumption.join("\n")}"
     end
 
-    def drink_beer_from_brewery(args)
-        # creates new CustomerBeer instance with num_consumed = 1 and num_available = 0
-    end
 
-    def drink_beer_from_fridge(args)
-        # finds CustomerBeer instance, increases num_consumed by 1, decreases num_available by 1
-    end
 
-    def buy_beer(args)
-        # add to num_available if CustomerBeer instance exists or create new one
+
+
+
+
+    def buy_drink_beer
+        TTY::Prompt.new.select("Buy or drink beer?") do |menu|
+            menu.choice "Buy beer", -> {self.buy_beer}
+            menu.choice "Drink beer", -> {self.drink_beer_menu}
+        end
     end
     
+    def buy_beer(beer, amount = 1)
+        # add to num_available if ConsumerBeer instance exists or create new one
+    end
+    
+    def drink_beer_menu
+        TTY::Prompt.new.select("Would you like to drink from your fridge or go to the brewery?") do |menu|
+            menu.choice "Drink from fridge", -> {self.choose_beer_from_fridge}
+            menu.choice "Go to brewery", -> {self.drink_beer_from_brewery}
+        end
+    end
+
+    def drink_beer_from_brewery(beer)
+        # creates new ConsumerBeer instance with num_consumed = 1 and num_available = 0
+        # or increases num_consumed by 1 for existing ConsumerBeer instance
+    end
+
+    def choose_beer_from_fridge
+        # provide list of beers in fridge
+    end
+
+    def drink_beer_from_fridge(beer)
+        # finds ConsumerBeer instance, increases num_consumed by 1, decreases num_available by 1
+    end
+
 
 
 
