@@ -1,5 +1,5 @@
 class Interface
-  attr_accessor :prompt, :user
+  attr_accessor :prompt, :consumer
 
   def initialize
     @prompt = TTY::Prompt.new
@@ -24,7 +24,7 @@ class Interface
 
   # def main_brewery_menu
   #   system "clear"
-  #   puts self.user.name
+  #   puts self.consumer.name
   #   prompt.select("Hello #{self.user.name}, What could you like to do today?") do |menu|
   #     menu.choice "See my popular beer", -> {Brewery.most_popular}
   #     menu.choice "See my collection", -> {Brewery.beers}
@@ -42,10 +42,12 @@ class Interface
 
   def main_consumer_menu
     system "clear"
-    puts self.user.name
-    prompt.select("Hello #{self.user.name}, What could you like to do today?") do |menu|
-      menu.choice "See my fridge", -> {Consumer.consumer_beers}
-      menu.choice "Drink a beer", -> {Consumer.drink_a_beer}
+    puts self.consumer.name
+    prompt.select("Hello #{self.consumer.name}, What could you like to do today?") do |menu|
+      menu.choice "See my Beer Profile", -> {self.consumer.beer_profile}
+      menu.choice "Acquire some beer", -> {self.consumer.get_beer}
+      menu.choice "See what others are drinking", -> {self.consumer.view_other_users}
+      menu.choice "Explore breweries", -> {self.consumer.view_breweries}
     end
   end
 

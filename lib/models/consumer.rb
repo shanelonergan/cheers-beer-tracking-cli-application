@@ -24,12 +24,21 @@ class Consumer < ActiveRecord::Base
 
     def view_fridge
         # display beers in a readable way with appropriate info
+        puts "look at all these yummy beers"
     end
 
     def beer_history
         # what stats do we want to include?
         # probably need several methods
         # this method will print out results of helper methods
+        puts "you drink too much"
+    end
+
+    def beer_profile
+        TTY::Prompt.new.select("What do you want to see?") do |menu|
+            menu.choice "My Fridge", -> {self.view_fridge}
+            menu.choice "My Beer History", -> {self.beer_history}
+        end
     end
 
     def drink_beer_from_brewery(args)
