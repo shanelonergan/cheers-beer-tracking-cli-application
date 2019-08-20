@@ -6,6 +6,7 @@ class Interface
   end
 
   def welcome
+    system "clear"
     puts "Hi there!"
     self.prompt.select("Brewer or Drinker?") do |menu|
       menu.choice "Brewer", -> {self.handle_brewer}
