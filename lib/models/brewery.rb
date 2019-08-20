@@ -1,5 +1,7 @@
 class Brewery < ActiveRecord::Base
     has_many :beers
+    has_many :consumer_beers, through: :beers
+
 
     # def sold_beer_count
     #     # returns the number of beers bought for each of the brewery's beer instances

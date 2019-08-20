@@ -43,7 +43,7 @@ class Interface
   def main_consumer_menu
     system "clear"
     puts self.consumer.name
-    prompt.select("Hello #{self.consumer.name}, What could you like to do today?") do |menu|
+    prompt.select("Hello #{self.consumer.name}, what would you like to do today?") do |menu|
       menu.choice "See my Beer Profile", -> {self.consumer.beer_profile}
       menu.choice "Acquire some beer", -> {self.consumer.get_beer}
       menu.choice "See what others are drinking", -> {self.consumer.view_other_users}
