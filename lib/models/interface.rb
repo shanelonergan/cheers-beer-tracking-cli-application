@@ -6,34 +6,34 @@ class Interface
   end
 
   def welcome
-    puts "Wazzup"
+    puts "Hi there!"
     self.prompt.select("Brewer or Drinker?") do |menu|
-      menu.choice "Brewer", -> {Interface.handle_brewer}
-      menu.choice "Drinker", -> {Interface.handle_drinker}
+      menu.choice "Brewer", -> {self.handle_brewer}
+      menu.choice "Drinker", -> {self.handle_drinker}
     end
   end
 
   # Brewery User Path
 
-  def self.handle_brewer
-    self.prompt.select("Are you a new or returning user?") do |menu|
-      menu.choice "New User", -> {Brewery.handle_new_brewer}
-      menu.choice "Returning User", -> {Brewery.handle_returning_brewer}
-    end
-  end
+  # def self.handle_brewer
+  #   self.prompt.select("Are you a new or returning user?") do |menu|
+  #     menu.choice "New User", -> {Brewery.handle_new_brewer}
+  #     menu.choice "Returning User", -> {Brewery.handle_returning_brewer}
+  #   end
+  # end
 
-  def main_brewery_menu
-    system "clear"
-    puts self.user.name
-    prompt.select("Hello #{self.user.name}, What could you like to do today?") do |menu|
-      menu.choice "See my popular beer", -> {Brewery.most_popular}
-      menu.choice "See my collection", -> {Brewery.beers}
-    end
-  end
+  # def main_brewery_menu
+  #   system "clear"
+  #   puts self.user.name
+  #   prompt.select("Hello #{self.user.name}, What could you like to do today?") do |menu|
+  #     menu.choice "See my popular beer", -> {Brewery.most_popular}
+  #     menu.choice "See my collection", -> {Brewery.beers}
+  #   end
+  # end
 
   # Consumer User Path
 
-  def self.handle_drinker
+  def handle_drinker
     self.prompt.select("Are you a new or returning user?") do |menu|
       menu.choice "New User", -> {Consumer.handle_new_consumer}
       menu.choice "Returning User", -> {Consumer.handle_returning_consumer}
