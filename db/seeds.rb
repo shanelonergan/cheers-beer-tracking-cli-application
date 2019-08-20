@@ -44,8 +44,8 @@ defender = Beer.create(brewery_id: brooklyn.id, name: "Defender IPA", style: "AP
 brooklyn_lager = Beer.create(brewery_id: brooklyn.id, name: "Brooklyn Lager", style: "Lager", additions: "", abv: 5.2)
 
 mb1 = ConsumerBeer.create(beer_id: oberon.id, consumer_id: matt.id, num_available: 6, num_consumed: 20, size: 12, packaging: "bottle", exp_date: Date.new(2019,9,19), rating: 5)
-mb2 = ConsumerBeer.create(beer_id: yuengling_golden.id, consumer_id: matt.id, num_available: 1, num_consumed: 4, size: 12, packaging: "bottle", exp_date: Date.new(2019,10,8))
-mb3 = ConsumerBeer.create(beer_id: defender.id, consumer_id: matt.id, num_available: 6, num_consumed: 12, size: 12, packaging: "bottle", exp_date: Date.new(2019,9,30))
+mb2 = ConsumerBeer.create(beer_id: yuengling_golden.id, consumer_id: matt.id, num_available: 1, num_consumed: 4, size: 12, packaging: "bottle", exp_date: Date.new(2019,10,8), rating: 4.5)
+mb3 = ConsumerBeer.create(beer_id: defender.id, consumer_id: matt.id, num_available: 6, num_consumed: 12, size: 12, packaging: "bottle", exp_date: Date.new(2019,9,30), rating: 3.5)
 mb4 = ConsumerBeer.create(beer_id: sam_adams.id, consumer_id: matt.id, num_available: 6, num_consumed: 7, size: 12, packaging: "bottle", exp_date: Date.new(2019,9,19), rating: 2)
 
 

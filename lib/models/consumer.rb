@@ -44,10 +44,15 @@ class Consumer < ActiveRecord::Base
             menu.choice "Full History", -> {self.full_beer_history}
         end
     end
+
+    def fridge_contents
+        self.consumer_beers.map { |consumer_beer| "#{consumer_beer.beer.name.pluralize}: #{consumer_beer.num_available}" }
+    end
     
     def view_fridge
         # display beers in a readable way with appropriate info
-        self.consumer_beers.each { |consumer_beer| puts "#{consumer_beer.num_available} #{consumer_beer.beer.name.pluralize}" }
+        #self.consumer_beers.each { |consumer_beer| puts "#{consumer_beer.num_available} #{consumer_beer.beer.name.pluralize}" }
+        puts "#{fridge_contents.join("\n")}"
     end
 
     def beer_consumption
@@ -119,21 +124,56 @@ class Consumer < ActiveRecord::Base
     def drink_beer_menu
         TTY::Prompt.new.select("Would you like to drink from your fridge or go to the brewery?") do |menu|
             menu.choice "Drink from fridge", -> {self.choose_beer_from_fridge}
-            menu.choice "Go to brewery", -> {self.drink_beer_from_brewery}
+            menu.choice "Go to brewery", -> {self.choose_beer_from_brewery}
         end
+    end
+
+    def choose_beer_from_brewery
+        brewery_choice = TTY::Prompt.new.select("What brewery?", Brewery.pluck(:name))
+        beer_choice = TTY::Prompt.new.select("What beer?", Brewery.find_by(name: brewery_choice).beers.pluck(:name))
+        chosen_beer = Beer.find_by(name: beer_choice)
+        drink_beer_from_brewery(chosen_beer)
     end
 
     def drink_beer_from_brewery(beer)
         # creates new ConsumerBeer instance with num_consumed = 1 and num_available = 0
         # or increases num_consumed by 1 for existing ConsumerBeer instance
+        if !self.consumer_beers.find_by(beer_id: beer.id)
+            rating = TTY::Prompt.new.ask("Rate this beer from 1-5").to_f
+            ConsumerBeer.create(beer_id: beer.id, consumer_id: self.id, num_available: 0, num_consumed: 1, rating: rating)
+        else
+            current_cbeer = self.consumer_beers.find_by(beer_id: beer.id)
+            if !current_cbeer.rating
+                rating = TTY::Prompt.new.ask("Rate this beer from 1-5").to_f
+            else
+                update_rating = TTY::Prompt.new.select("Do you want to change your current rating of #{current_cbeer.rating}?", ["Yes", "No"])
+                if update_rating == "Yes"
+                    rating = TTY::Prompt.new.ask("Rate this beer from 1-5").to_f
+                else
+                    rating = current_cbeer.rating
+                end
+                new_num = self.consumer_beers.find_by(beer_id: beer.id).num_consumed + 1
+                self.consumer_beers.find_by(beer_id: beer.id).update(num_consumed: new_num, rating: rating)
+            end
+        end
+
     end
 
     def choose_beer_from_fridge
         # provide list of beers in fridge
+        beer_choice = TTY::Prompt.new.select("What beer?", fridge_contents)
+        beer_name = beer_choice.split(": ")
+        current_cbeer = Beer.find_by(name: beer_name[0].singularize)
+        drink_beer_from_fridge(current_cbeer)
     end
 
     def drink_beer_from_fridge(beer)
         # finds ConsumerBeer instance, increases num_consumed by 1, decreases num_available by 1
+        current_beer = self.consumer_beers.find_by(beer_id: beer.id)
+        new_num_available = current_beer.num_available - 1
+        new_num_consumed = current_beer.num_consumed + 1
+        current_beer.update(num_available: new_num_available, num_consumed: new_num_consumed)
+        puts "🍻 Cheers! You now have #{current_beer.num_available} #{beer.name}s left 🍻"
     end
 
 
