@@ -23,7 +23,7 @@ class Consumer < ActiveRecord::Base
             "IPA",
             "Sour",
             "Stout"])
-            Consumer.create(name: name, age: age, location: location, gender: gender, favorite_style: favorite_style)
+        Consumer.create(name: name, age: age, location: location, gender: gender, favorite_style: favorite_style)
     end
 
     # Beer Profile
@@ -152,9 +152,9 @@ class Consumer < ActiveRecord::Base
                 else
                     rating = current_cbeer.rating
                 end
-                new_num = self.consumer_beers.find_by(beer_id: beer.id).num_consumed + 1
-                self.consumer_beers.find_by(beer_id: beer.id).update(num_consumed: new_num, rating: rating)
             end
+            new_num = self.consumer_beers.find_by(beer_id: beer.id).num_consumed + 1
+            self.consumer_beers.find_by(beer_id: beer.id).update(num_consumed: new_num, rating: rating)
         end
 
     end
@@ -170,9 +170,19 @@ class Consumer < ActiveRecord::Base
     def drink_beer_from_fridge(beer)
         # finds ConsumerBeer instance, increases num_consumed by 1, decreases num_available by 1
         current_beer = self.consumer_beers.find_by(beer_id: beer.id)
+        if !current_beer.rating
+            rating = TTY::Prompt.new.ask("Rate this beer from 1-5").to_f
+        else
+            update_rating = TTY::Prompt.new.select("Do you want to change your current rating of #{current_beer.rating}?", ["Yes", "No"])
+            if update_rating == "Yes"
+                rating = TTY::Prompt.new.ask("Rate this beer from 1-5").to_f
+            else
+                rating = current_beer.rating
+            end
+        end
         new_num_available = current_beer.num_available - 1
         new_num_consumed = current_beer.num_consumed + 1
-        current_beer.update(num_available: new_num_available, num_consumed: new_num_consumed)
+        current_beer.update(num_available: new_num_available, num_consumed: new_num_consumed, rating: rating)
         puts "🍻 Cheers! You now have #{current_beer.num_available} #{beer.name}s left 🍻"
     end
 
