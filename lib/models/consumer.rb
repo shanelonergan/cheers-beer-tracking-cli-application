@@ -24,20 +24,33 @@ class Consumer < ActiveRecord::Base
 
     def view_fridge
         # display beers in a readable way with appropriate info
-        self.consumer_beers.each { |beer| puts "#{beer.num_available} #{beer.name.pluralize}" }
+        self.consumer_beers.each { |consumer_beer| puts "#{consumer_beer.num_available} #{consumer_beer.beer.name.pluralize}" }
     end
 
-    def beer_history
-        # what stats do we want to include?
+    def beer_consumption
+    end
+
+    def quick_stats
+        #top 3: most drank, highest rated, breweries
+        puts "1" #"your top three most drank beers: #{beer_consumption.limit(3)}"
+        puts  "2" #"your top three highest rated beers: #{beer_ratings.limit(3)}"
+        puts "3" #your top three breweries: #{brewery_frequency.limit(3)}"
+    end
+
+    def beer_history_menu
+        # what stats do we want to include? Full history(list of beers consumed), stats(top 3 most drank beers, highest rated beers, breweries)
         # probably need several methods
         # this method will print out results of helper methods
-        puts "you drink too much"
+        TTY::Prompt.new.select("What do you want to see?") do |menu|
+            menu.choice "Quick Stats", -> {self.quick_stats}
+            menu.choice "Full History", -> {self.beer_history}
+        end
     end
 
     def beer_profile
         TTY::Prompt.new.select("What do you want to see?") do |menu|
             menu.choice "My Fridge", -> {self.view_fridge}
-            menu.choice "My Beer History", -> {self.beer_history}
+            menu.choice "My Beer History", -> {self.beer_history_menu}
         end
     end
 
