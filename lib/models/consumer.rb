@@ -28,13 +28,17 @@ class Consumer < ActiveRecord::Base
     end
 
     def beer_consumption
+        beer_consumed = self.consumer_beers.sort_by { |beer| beer.num_consumed }.reverse
+        beer_consumed.map {|consumer_beer| "#{consumer_beer.beer.name}: #{consumer_beer.num_consumed}"}
     end
+
+
 
     def quick_stats
         #top 3: most drank, highest rated, breweries
-        puts "1" #"your top three most drank beers: #{beer_consumption.limit(3)}"
+        puts "Your top three most drank beers: #{beer_consumption[0..2].join(", ")}"
         puts  "2" #"your top three highest rated beers: #{beer_ratings.limit(3)}"
-        puts "3" #your top three breweries: #{brewery_frequency.limit(3)}"
+        puts "3" #"your top three breweries: #{brewery_frequency.limit(3)}"
     end
 
     def beer_history_menu
