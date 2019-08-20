@@ -6,7 +6,7 @@ ConsumerBeer.destroy_all
 
 
 matt = Consumer.create(name: "Matt", age: 27, location: "Michigan", gender: "Male", favorite_style: "Belgian White")
-# josh = Consumer.create(name: "Josh", age: 30, location: "Texas", gender: "Male", favorite: "Sour")
+josh = Consumer.create(name: "Josh", age: 30, location: "Texas", gender: "Male", favorite_style: "Sour")
 shane = Consumer.create(name: "Shane", age: 23, location: "Michigan", gender: "Male", favorite_style: "New England IPA")
 # kenny = Consumer.create("Kenny", 41, "New York", "Male", "Stout")
 # derya = Consumer.create("Derya", 21, "Illinois", "Female", "Sour")

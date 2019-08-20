@@ -2,6 +2,25 @@ class Consumer < ActiveRecord::Base
     has_many :consumer_beers
     has_many :beers, through: :consumer_beers
 
+    def self.handle_returning_consumer
+        puts "Welcome back! What is your name?"
+        name = gets.chomp
+        Consumer.find_by(name: name)
+    end
+
+    def self.handle_new_consumer
+        name = TTY::Prompt.new.ask("Welcome to our program! What is your name?")
+        age = TTY::Prompt.new.ask("What is your age?")
+        location = TTY::Prompt.new.ask("Where do you live?")
+        gender = TTY::Prompt.new.select("What is your gender?", ["Male", "Female"])
+        favorite_style = TTY::Prompt.new.select("What is your favorite style of beer?",
+            ["Lager",
+            "Pilsner",
+            "IPA",
+            "Sour",
+            "Stout"])
+        Consumer.create(name: name, age: age, location: location, gender: gender, favorite_style: favorite_style)
+    end
 
     def view_fridge
         # display beers in a readable way with appropriate info

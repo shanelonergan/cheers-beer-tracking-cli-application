@@ -9,4 +9,7 @@ end
 
 cli.user = user_object
 
+choice = cli.main_menu
+
+binding.pry
 puts "HELLO WORLD"
