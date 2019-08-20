@@ -2,9 +2,13 @@ class Consumer < ActiveRecord::Base
     has_many :consumer_beers
     has_many :beers, through: :consumer_beers
 
+    def figure_out_popular_beer
+        self.consumer_beers
+    end
+
     def self.handle_returning_consumer
         puts "Welcome back! What is your name?"
-        name = gets.chomp
+        name = gets.chomp.capitalize
         Consumer.find_by(name: name)
     end
 
@@ -34,16 +38,31 @@ class Consumer < ActiveRecord::Base
 
     def beer_ratings
         beers_with_rating = self.consumer_beers.where.not(rating: nil)
-        # binding.pry
         beer_rating = beers_with_rating.sort_by { |beer| beer.rating }.reverse
         beer_rating.map {|consumer_beer| "#{consumer_beer.beer.name}: #{consumer_beer.rating}"}
+    end
+
+    def brewery_consumed_count
+        self.consumer_beers.map {|consumer_beer| {consumer_beer.brewery => consumer_beer.num_consumed}}
+    end
+
+    def brewery_frequency
+        frequency_hash = Hash.new(0)
+        brewery_consumed_count.each do |brew_hash|
+            frequency_hash[brew_hash.keys.first] += brew_hash.values.first
+        end
+        frequency_hash
+    end
+
+    def print_brewery_frequency
+        self.brewery_frequency.map {|brewery, count| "#{brewery.name}, beers consumed: #{count}"}
     end
 
     def quick_stats
         #top 3: most drank, highest rated, breweries
         puts "Your top three most drank beers: #{beer_consumption[0..2].join(", ")}"
         puts "Your top three highest rated beers: #{beer_ratings[0..2].join(", ")}"
-        puts "3" #"your top three breweries: #{brewery_frequency.limit(3)}"
+        puts "Your top three breweries: #{print_brewery_frequency[0..2].join(", ")}"
     end
 
     def beer_history_menu
