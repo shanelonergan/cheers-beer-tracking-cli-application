@@ -23,9 +23,26 @@ class Consumer < ActiveRecord::Base
             "IPA",
             "Sour",
             "Stout"])
-        Consumer.create(name: name, age: age, location: location, gender: gender, favorite_style: favorite_style)
+            Consumer.create(name: name, age: age, location: location, gender: gender, favorite_style: favorite_style)
     end
-
+    
+    def beer_profile
+        TTY::Prompt.new.select("What do you want to see?") do |menu|
+            menu.choice "My Fridge", -> {self.view_fridge}
+            menu.choice "My Beer History", -> {self.beer_history_menu}
+        end
+    end
+    
+    def beer_history_menu
+        # what stats do we want to include? Full history(list of beers consumed), stats(top 3 most drank beers, highest rated beers, breweries)
+        # probably need several methods
+        # this method will print out results of helper methods
+        TTY::Prompt.new.select("What do you want to see?") do |menu|
+            menu.choice "Quick Stats", -> {self.quick_stats}
+            menu.choice "Full History", -> {self.full_beer_history}
+        end
+    end
+    
     def view_fridge
         # display beers in a readable way with appropriate info
         self.consumer_beers.each { |consumer_beer| puts "#{consumer_beer.num_available} #{consumer_beer.beer.name.pluralize}" }
@@ -60,26 +77,11 @@ class Consumer < ActiveRecord::Base
 
     def quick_stats
         #top 3: most drank, highest rated, breweries
-        puts "Your top three most drank beers: #{beer_consumption[0..2].join(", ")}"
-        puts "Your top three highest rated beers: #{beer_ratings[0..2].join(", ")}"
-        puts "Your top three breweries: #{print_brewery_frequency[0..2].join(", ")}"
+        puts "\nYour top three most drank beers:\n#{beer_consumption[0..2].join("\n")}\n\nYour top three highest rated beers:\n#{beer_ratings[0..2].join("\n")}\n\nYour top three breweries:\n#{print_brewery_frequency[0..2].join("\n")}"
     end
 
-    def beer_history_menu
-        # what stats do we want to include? Full history(list of beers consumed), stats(top 3 most drank beers, highest rated beers, breweries)
-        # probably need several methods
-        # this method will print out results of helper methods
-        TTY::Prompt.new.select("What do you want to see?") do |menu|
-            menu.choice "Quick Stats", -> {self.quick_stats}
-            menu.choice "Full History", -> {self.beer_history}
-        end
-    end
-
-    def beer_profile
-        TTY::Prompt.new.select("What do you want to see?") do |menu|
-            menu.choice "My Fridge", -> {self.view_fridge}
-            menu.choice "My Beer History", -> {self.beer_history_menu}
-        end
+    def full_beer_history
+        puts "#{beer_consumption.join("\n")}"
     end
 
     def drink_beer_from_brewery(args)
