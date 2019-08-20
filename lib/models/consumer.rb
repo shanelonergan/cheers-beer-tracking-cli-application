@@ -33,7 +33,9 @@ class Consumer < ActiveRecord::Base
     end
 
     def beer_ratings
-        beer_rating = self.consumer_beers.sort_by { |beer| beer.rating }.reverse
+        beers_with_rating = self.consumer_beers.where.not(rating: nil)
+        # binding.pry
+        beer_rating = beers_with_rating.sort_by { |beer| beer.rating }.reverse
         beer_rating.map {|consumer_beer| "#{consumer_beer.beer.name}: #{consumer_beer.rating}"}
     end
 
