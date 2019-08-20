@@ -10,11 +10,22 @@ class Beer < ActiveRecord::Base
         consumer_beers_with_ratings = self.consumer_beers.select(rating: true)
         average_rating = consumer_beers_with_ratings.average(:rating)
         #make it legible
-        average_rating.to_f.floor(2) 
+        average_rating.to_f.floor(2)
     end
 
     def self.most_popular
-        #returns the instance of the most bought beer
+        #returns beer that has the most user_beers instances
+        Beer.all.sort_by { |beer| beer.consumer_beers.count }.last
+    end
+
+    def num_sold
+        num_consumed = self.consumer_beers.sum(:num_consumed)
+        num_available = self.consumer_beers.sum(:num_available)
+        num_consumed + num_available
+    end
+
+    def self.best_seller
+        Beer.all.sort_by { |beer| beer.num_sold }.last
     end
 
     def self.least_popular
