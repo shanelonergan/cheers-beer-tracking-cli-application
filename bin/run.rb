@@ -7,9 +7,9 @@ while !user_object
   user_object = cli.welcome
 end
 
-cli.user = user_object
+cli.consumer = user_object
 
-choice = cli.main_menu
+choice = cli.main_consumer_menu
 
 binding.pry
 puts "HELLO WORLD"
