@@ -196,9 +196,9 @@ class Consumer < ActiveRecord::Base
             menu.choice "View #{other_user_name}'s quick stats", -> {other_user.quick_stats}
         end
     end
-
+    
     # view brewery info
-
+    
     def view_breweries
         brewery_choice = TTY::Prompt.new.select("What brewery?", Brewery.pluck(:name))
         brewery = Brewery.find_by(name: brewery_choice)
@@ -207,17 +207,50 @@ class Consumer < ActiveRecord::Base
             menu.choice "View Stats", -> {self.view_brewery_stats(brewery)}
         end
     end
-
+    
     def view_brewery_menu(brewery)
         puts "\n"
         puts "#{brewery.name}'s Beer Menu"
         puts "\n"
         brewery.display_beers
     end
-
-    def view_brewery_stats
+    # brewery.average_rating_by_beer.each do |beer, rating|
+    #     puts "#{beer.name}: #{num_sold} sold"
+    # end
+    # puts "#{brewery.average_rating_by_beer}: "
+    
+    def view_brewery_stats(brewery)
+        # most popular beer
+        # average rating
+        # beers sold
+        self.print_brewery_rating(brewery)
+        self.print_most_popular(brewery)
+        self.print_beers_sold(brewery)
     end
 
+    def print_most_popular(brewery)
+        puts "\n"
+        puts "Most Popular Beer:"
+        puts "\n"
+        puts "#{brewery.most_popular[0].name}"
+    end
+    
+    def print_brewery_rating(brewery)
+        puts "\n"
+        puts "#{brewery.name}'s Consumer Rating:"
+        puts "\n"
+        puts "#{brewery.brewery_rating}/5"
+    end
+    
+    def print_beers_sold(brewery)
+        puts "\n"
+        puts "Beer Sales:"
+        puts "\n"
+        brewery.sold_beer_count.each do |beer, num_sold|
+            puts "#{beer.name}: #{num_sold} sold"
+        end
+    end
+    
     # delete account
 
     def delete_account
