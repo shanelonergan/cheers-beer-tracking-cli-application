@@ -1,7 +1,43 @@
 class Brewery < ActiveRecord::Base
     has_many :beers
     has_many :consumer_beers, through: :beers
-    
+
+    #User Interface
+
+    def self.handle_returning_brewery
+        name = TTY::Prompt.new.select("Select your brewery:", Brewery.pluck(:name))
+        Brewery.find_by(name: name)
+    end
+
+    def self.handle_new_brewery
+        name = TTY::Prompt.new.ask("Welcome to our program! What is your brewery's name?")
+        location = TTY::Prompt.new.ask("Where are you located?")
+        year_founded = TTY::Prompt.new.ask("What year were you founded?")
+        specialty = TTY::Prompt.new.select("What style do you specialize in?",
+            ["Lager",
+            "Pilsner",
+            "IPA",
+            "Sour",
+            "Stout"])
+        Brewery.create(name: name, location: location, year_founded: year_founded, specialty: specialty)
+    end
+
+    def delete_account
+        confirm = TTY::Prompt.new.select("Are you sure you want to delete your account?", ["Yes", "No"])
+        if confirm == "Yes"
+            ConsumerBeer.all.each do |cbeer|
+                cbeer.destroy if cbeer.beer.brewery_id == self.id
+            end
+            Beer.all.each do |beer|
+                beer.destroy if beer.brewery_id == self.id
+            end
+            self.destroy
+            puts "Sorry to see you go!"
+        end
+        exit!
+    end
+
+    # Data Methods
     
     def display_beers
         self.beers.each do |beer|

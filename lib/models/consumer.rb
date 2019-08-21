@@ -2,9 +2,9 @@ class Consumer < ActiveRecord::Base
     has_many :consumer_beers
     has_many :beers, through: :consumer_beers
 
-    def figure_out_popular_beer
-        self.consumer_beers
-    end
+    # def figure_out_popular_beer
+    #     self.consumer_beers
+    # end
 
     def self.handle_returning_consumer
         puts "Welcome back! What is your name?"
@@ -53,6 +53,7 @@ class Consumer < ActiveRecord::Base
         # display beers in a readable way with appropriate info
         #self.consumer_beers.each { |consumer_beer| puts "#{consumer_beer.num_available} #{consumer_beer.beer.name.pluralize}" }
         puts "#{fridge_contents.join("\n")}"
+        
     end
 
     def beer_consumption
@@ -262,6 +263,7 @@ class Consumer < ActiveRecord::Base
             self.destroy
             puts "Sorry to see you go!"
         end
+        exit!
     end
-
+    
 end
