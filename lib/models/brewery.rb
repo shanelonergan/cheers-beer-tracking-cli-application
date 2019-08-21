@@ -1,5 +1,5 @@
 class Brewery < ActiveRecord::Base
-    has_many :beers
+    has_many :beers, dependent: :destroy
     has_many :consumer_beers, through: :beers
 
     #User Interface
@@ -25,12 +25,12 @@ class Brewery < ActiveRecord::Base
     def delete_account
         confirm = TTY::Prompt.new.select("Are you sure you want to delete your account?", ["Yes", "No"])
         if confirm == "Yes"
-            ConsumerBeer.all.each do |cbeer|
-                cbeer.destroy if cbeer.beer.brewery_id == self.id
-            end
-            Beer.all.each do |beer|
-                beer.destroy if beer.brewery_id == self.id
-            end
+            # ConsumerBeer.all.each do |cbeer|
+            #     cbeer.destroy if cbeer.beer.brewery_id == self.id
+            # end
+            # Beer.all.each do |beer|
+            #     beer.destroy if beer.brewery_id == self.id
+            # end
             self.destroy
             puts "Sorry to see you go!"
         end
@@ -111,10 +111,55 @@ class Brewery < ActiveRecord::Base
         end
     end
     
+    def update_menu
+        TTY::Prompt.new.select("What would you like to change?") do |menu|
+            menu.choice "Add a beer", -> {self.add_beer}
+            menu.choice "Remove a beer", -> {self.choose_remove_beer}
+        end
+    end
 
+    def add_beer
+        name = TTY::Prompt.new.ask("What is your new beer's name?")
+        style = TTY::Prompt.new.ask("What style is this beer?")
+        abv = TTY::Prompt.new.ask("What is the ABV content?")
+        Beer.create(name: name, style: style, abv: abv, brewery: self)
+        
+    end
 
+    def choose_remove_beer
+        beer_choice = TTY::Prompt.new.select("What beer do you want to remove?", self.beers.pluck(:name))
+        chosen_beer = Beer.find_by(name: beer_choice)
+        remove_beer(chosen_beer)
+    end
 
+    def remove_beer(chosen_beer)
+        confirm = TTY::Prompt.new.select("Are you sure?", ["Yes", "No"])
+        if confirm == "Yes"
+            # ConsumerBeer.all.each do |cbeer|
+            #     cbeer.destroy if cbeer.beer_id == chosen_beer.id
+            # end
+            chosen_beer.destroy
+        end
+    end
 
+    def self.industry_stats
+        #3 highest rated breweries
+        Brewery.print_highest_rated
+        #3 most selling brewery
+        #top selling beer 
+        #highest rated beer
+        #most produced style
+    end
+    
+    def self.print_highest_rated
+        puts "\nThe 3 highest rated breweries:\n\n#{Brewery.highest_rated[0..2].join("\n")}"
+    end
+
+    def self.highest_rated
+        brewery_with_rating = Brewery.all.select {|brewery| brewery.brewery_rating != 0}
+        sorted_brewery_rating = brewery_with_rating.sort_by { |brewery| brewery.brewery_rating }.reverse
+        sorted_brewery_rating.map {|brewery| "#{brewery.name}: #{brewery.brewery_rating}"}
+    end
 
 
 

@@ -1,5 +1,5 @@
 class Consumer < ActiveRecord::Base
-    has_many :consumer_beers
+    has_many :consumer_beers, dependent: :destroy
     has_many :beers, through: :consumer_beers
 
     # def figure_out_popular_beer
@@ -257,9 +257,9 @@ class Consumer < ActiveRecord::Base
     def delete_account
         confirm = TTY::Prompt.new.select("Are you sure you want to delete your account?", ["Yes", "No"])
         if confirm == "Yes"
-            ConsumerBeer.all.each do |cbeer|
-                cbeer.destroy if cbeer.consumer_id == self.id
-            end
+            # ConsumerBeer.all.each do |cbeer|
+            #     cbeer.destroy if cbeer.consumer_id == self.id
+            # end
             self.destroy
             puts "Sorry to see you go!"
         end
