@@ -1,5 +1,5 @@
 class Interface
-  attr_accessor :prompt, :consumer
+  attr_accessor :prompt, :consumer, :brewery
 
   def initialize
     @prompt = TTY::Prompt.new
@@ -16,19 +16,22 @@ class Interface
 
   # Brewery User Path
 
-  def self.handle_brewer
+  def handle_brewer
     self.prompt.select("Are you a new or returning user?") do |menu|
-      menu.choice "New User", -> {Brewery.handle_new_brewer}
-      menu.choice "Returning User", -> {Brewery.handle_returning_brewer}
+      menu.choice "New User", -> {Brewery.handle_new_brewery}
+      menu.choice "Returning User", -> {Brewery.handle_returning_brewery}
     end
   end
 
   def main_brewery_menu
     system "clear"
-    puts self.consumer.name
-    prompt.select("Hello #{self.user.name}, What could you like to do today?") do |menu|
-      menu.choice "See my popular beer", -> {Brewery.most_popular}
-      menu.choice "See my collection", -> {Brewery.beers}
+    puts self.brewery.name
+    prompt.select("Hello #{self.brewery.name}, What could you like to do today?") do |menu|
+      menu.choice "See my menu", -> {self.display_beers}
+      menu.choice "Update my menu", -> {self.update_menu}
+      menu.choice "See my stats", -> {self.see_stats}
+      menu.choice "Delete my account", -> {self.brewery.delete_account}
+      menu.choice "Exit", -> {self.exit_app}
     end
   end
 
@@ -50,7 +53,12 @@ class Interface
       menu.choice "See what others are drinking", -> {self.consumer.view_other_users}
       menu.choice "Explore breweries", -> {self.consumer.view_breweries}
       menu.choice "Delete Account", -> {self.consumer.delete_account}
+      menu.choice "Exit", ->{self.exit_app}
     end
   end
 
+  def exit_app
+    puts "See you next time!"
+    exit!
+  end
 end

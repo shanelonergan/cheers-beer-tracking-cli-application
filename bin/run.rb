@@ -7,9 +7,22 @@ while !user_object
   user_object = cli.welcome
 end
 
-cli.consumer = user_object
+if user_object.class == Consumer
+  cli.consumer = user_object
+  cli.main_consumer_menu
+else 
+  cli.brewery = user_object
+  cli.main_brewery_menu
+end
 
-choice = cli.main_consumer_menu
+loop do
+  TTY::Prompt.new.keypress("\nPress any key to return to the main menu")
+  if user_object.class == Consumer
+    cli.main_consumer_menu
+  else 
+    cli.main_brewery_menu
+  end
+end
 
 binding.pry
 puts "HELLO WORLD"
