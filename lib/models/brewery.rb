@@ -154,7 +154,9 @@ class Brewery < ActiveRecord::Base
         #top selling beer
         Brewery.print_top_selling_beer
         #highest rated beer
+        Brewery.print_highest_rated_beer
         #most produced style
+        Brewery.print_most_produced_style
     end
     
     def self.print_highest_rated
@@ -180,6 +182,24 @@ class Brewery < ActiveRecord::Base
         highest_selling_beer = Beer.best_seller
         puts "\nThe top selling beer:\n\n#{highest_selling_beer.name} from #{highest_selling_beer.brewery.name} with #{highest_selling_beer.num_sold} sold"
     end
+
+    def self.print_highest_rated_beer
+        top_rated_beer = Beer.highest_rated_beer
+        puts "\nThe highest rated beer:\n\n#{top_rated_beer.name} from #{top_rated_beer.brewery.name} with an average rating of #{top_rated_beer.average_rating}/5"
+    end
+
+    def self.print_most_produced_style
+        puts "\nThe most produced beer style:\n\n#{Brewery.most_produced_style[0]} with #{Brewery.most_produced_style[1]} beers"
+    end
+
+    def self.most_produced_style
+        style_hash = Beer.all.reduce(Hash.new(0)) do |memo, beer|
+            memo[beer.style] += 1
+            memo
+        end
+        style_hash.sort_by {|style, count| count}.last
+    end
+
 
 
 

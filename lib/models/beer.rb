@@ -17,6 +17,11 @@ class Beer < ActiveRecord::Base
         # average.to_f.floor(2)
     end
 
+    def self.highest_rated_beer
+        beers_with_ratings = Beer.all.select {|beer| beer.average_rating.class == Float}
+        sorted_beer_ratings = beers_with_ratings.sort_by {|beer| beer.average_rating}.last 
+    end
+
     def self.most_popular
         #returns beer that has the most user_beers instances
         Beer.all.sort_by { |beer| beer.consumer_beers.count }.last
