@@ -19,7 +19,7 @@ class Beer < ActiveRecord::Base
 
     def self.highest_rated_beer
         beers_with_ratings = Beer.all.select {|beer| beer.average_rating.class == Float}
-        sorted_beer_ratings = beers_with_ratings.sort_by {|beer| beer.average_rating}.last 
+        beers_with_ratings.sort_by {|beer| beer.average_rating}.last 
     end
 
     def self.most_popular
@@ -36,18 +36,5 @@ class Beer < ActiveRecord::Base
     def self.best_seller
         Beer.all.sort_by { |beer| beer.num_sold }.last
     end
-
-    def self.least_popular
-        #returns the instance of the least bought beer
-    end
-
-    def self.highest_rated
-        #returns the instance of the highest rated beer
-    end
-
-    def self.lowest_rated
-        #returns the instance of the lowest rated beer
-    end
-
 
 end
