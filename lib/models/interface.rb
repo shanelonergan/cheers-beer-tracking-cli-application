@@ -27,9 +27,9 @@ class Interface
     system "clear"
     puts self.brewery.name
     prompt.select("Hello #{self.brewery.name}, What could you like to do today?") do |menu|
-      menu.choice "See my menu", -> {self.display_beers}
-      menu.choice "Update my menu", -> {self.update_menu}
-      menu.choice "See my stats", -> {self.see_stats}
+      menu.choice "See my menu", -> {self.brewery.view_brewery_menu}
+      menu.choice "Update my menu", -> {self.brewery.update_menu}
+      menu.choice "See my stats", -> {self.brewery.see_stats}
       menu.choice "Delete my account", -> {self.brewery.delete_account}
       menu.choice "Exit", -> {self.exit_app}
     end
