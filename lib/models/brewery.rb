@@ -78,6 +78,38 @@ class Brewery < ActiveRecord::Base
     def brewery_rating
         self.consumer_beers.average(:rating).to_f.floor(1)
     end
+
+    def view_brewery_stats
+        # most popular beer
+        # average rating
+        # beers sold
+        self.print_brewery_rating
+        self.print_most_popular
+        self.print_beers_sold
+    end
+
+    def print_most_popular
+        puts "\n"
+        puts "Most Popular Beer:"
+        puts "\n"
+        puts "#{self.most_popular[0].name}"
+    end
+    
+    def print_brewery_rating
+        puts "\n"
+        puts "#{self.name}'s Consumer Rating:"
+        puts "\n"
+        puts "#{self.brewery_rating}/5"
+    end
+    
+    def print_beers_sold
+        puts "\n"
+        puts "Beer Sales:"
+        puts "\n"
+        self.sold_beer_count.each do |beer, num_sold|
+            puts "#{beer.name}: #{num_sold} sold"
+        end
+    end
     
 
 
