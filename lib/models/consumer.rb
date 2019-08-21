@@ -46,7 +46,8 @@ class Consumer < ActiveRecord::Base
     end
 
     def fridge_contents
-        self.consumer_beers.map { |consumer_beer| "#{consumer_beer.beer.name.pluralize}: #{consumer_beer.num_available}" }
+        beers_in_fridge = self.consumer_beers.select {|consumer_beer| consumer_beer.num_available > 0}
+        beers_in_fridge.map { |consumer_beer| "#{consumer_beer.beer.name.pluralize}: #{consumer_beer.num_available}" }
     end
 
     def view_fridge

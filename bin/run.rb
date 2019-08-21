@@ -17,6 +17,7 @@ end
 
 loop do
   TTY::Prompt.new.keypress("\nPress any key to return to the main menu")
+  user_object.reload
   if user_object.class == Consumer
     cli.main_consumer_menu
   else 
