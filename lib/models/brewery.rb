@@ -65,6 +65,10 @@ class Brewery < ActiveRecord::Base
         end
         count_hash
     end
+
+    def total_beers_sold
+        self.sold_beer_count.values.sum
+    end
     
     def average_rating_by_beer
         # returns the average rating for each of the brewery's beer instances
@@ -146,7 +150,9 @@ class Brewery < ActiveRecord::Base
         #3 highest rated breweries
         Brewery.print_highest_rated
         #3 most selling brewery
-        #top selling beer 
+        Brewery.print_most_sold
+        #top selling beer
+        Brewery.print_top_selling_beer
         #highest rated beer
         #most produced style
     end
@@ -159,6 +165,20 @@ class Brewery < ActiveRecord::Base
         brewery_with_rating = Brewery.all.select {|brewery| brewery.brewery_rating != 0}
         sorted_brewery_rating = brewery_with_rating.sort_by { |brewery| brewery.brewery_rating }.reverse
         sorted_brewery_rating.map {|brewery| "#{brewery.name}: #{brewery.brewery_rating}"}
+    end
+
+    def self.print_most_sold
+        puts "\nThe 3 highest selling breweries:\n\n#{Brewery.beers_sold_by_brewery[0..2].join("\n")}"
+    end
+
+    def self.beers_sold_by_brewery
+        sorted_beers_sold = Brewery.all.sort_by {|brewery| brewery.total_beers_sold}.reverse
+        sorted_beers_sold.map {|brewery| "#{brewery.name}: #{brewery.total_beers_sold}"}
+    end
+
+    def self.print_top_selling_beer
+        highest_selling_beer = Beer.best_seller
+        puts "\nThe top selling beer:\n\n#{highest_selling_beer.name} from #{highest_selling_beer.brewery.name} with #{highest_selling_beer.num_sold} sold"
     end
 
 
