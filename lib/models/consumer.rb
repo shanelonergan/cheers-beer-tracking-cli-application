@@ -9,7 +9,12 @@ class Consumer < ActiveRecord::Base
     def self.handle_returning_consumer
         puts "Welcome back! What is your name?"
         name = gets.chomp.capitalize
-        Consumer.find_by(name: name)
+        if !Consumer.find_by(name: name)
+          TTY::Prompt.new.keypress("User not found. Please enter a valid name. Press any key to try again.")
+          nil
+        else
+          Consumer.find_by(name: name)
+        end
     end
 
     def self.handle_new_consumer
