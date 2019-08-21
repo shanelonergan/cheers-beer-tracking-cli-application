@@ -38,7 +38,7 @@ class Brewery < ActiveRecord::Base
     end
 
     # Data Methods
-    
+
     def display_beers
         self.beers.each do |beer|
             puts "#{beer.name}: #{beer.style}, #{beer.abv}% ABV, Consumer Rating: #{beer.average_rating}/5"
@@ -51,12 +51,12 @@ class Brewery < ActiveRecord::Base
         puts "\n"
         self.display_beers
     end
-    
+
     def most_popular
         #returns the beer instance of the brewery's most bought beer
         self.sold_beer_count.sort_by {|beer, num_bought| num_bought}.last
     end
-    
+
     def sold_beer_count
         # returns the number of beers bought for each of the brewery's beer instances
         count_hash = {}
@@ -69,7 +69,7 @@ class Brewery < ActiveRecord::Base
     def total_beers_sold
         self.sold_beer_count.values.sum
     end
-    
+
     def average_rating_by_beer
         # returns the average rating for each of the brewery's beer instances
         rating_hash = {}
@@ -95,26 +95,23 @@ class Brewery < ActiveRecord::Base
     def print_most_popular
         puts "\n"
         puts "Most Popular Beer:"
-        puts "\n"
         puts "#{self.most_popular[0].name}"
     end
-    
+
     def print_brewery_rating
         puts "\n"
         puts "#{self.name}'s Consumer Rating:"
-        puts "\n"
         puts "#{self.brewery_rating}/5"
     end
-    
+
     def print_beers_sold
         puts "\n"
         puts "Beer Sales:"
-        puts "\n"
         self.sold_beer_count.each do |beer, num_sold|
             puts "#{beer.name}: #{num_sold} sold"
         end
     end
-    
+
     def update_menu
         TTY::Prompt.new.select("What would you like to change?") do |menu|
             menu.choice "Add a beer", -> {self.add_beer}
@@ -126,8 +123,8 @@ class Brewery < ActiveRecord::Base
         name = TTY::Prompt.new.ask("What is your new beer's name?")
         style = TTY::Prompt.new.ask("What style is this beer?")
         abv = TTY::Prompt.new.ask("What is the ABV content?")
-        Beer.create(name: name, style: style, abv: abv, brewery: self)
-        
+        new_beer = Beer.create(name: name, style: style, abv: abv, brewery: self)
+        puts "\n#{new_beer.name} has been added to your menu!"
     end
 
     def choose_remove_beer
@@ -139,11 +136,9 @@ class Brewery < ActiveRecord::Base
     def remove_beer(chosen_beer)
         confirm = TTY::Prompt.new.select("Are you sure?", ["Yes", "No"])
         if confirm == "Yes"
-            # ConsumerBeer.all.each do |cbeer|
-            #     cbeer.destroy if cbeer.beer_id == chosen_beer.id
-            # end
             chosen_beer.destroy
         end
+        puts "\n#{chosen_beer.name} has been removed from your menu\n"
     end
 
     def self.industry_stats
@@ -158,9 +153,9 @@ class Brewery < ActiveRecord::Base
         #most produced style
         Brewery.print_most_produced_style
     end
-    
+
     def self.print_highest_rated
-        puts "\nThe 3 highest rated breweries:\n\n#{Brewery.highest_rated[0..2].join("\n")}"
+        puts "\nThe 3 highest rated breweries:\n#{Brewery.highest_rated[0..2].join("\n")}"
     end
 
     def self.highest_rated
@@ -170,7 +165,7 @@ class Brewery < ActiveRecord::Base
     end
 
     def self.print_most_sold
-        puts "\nThe 3 highest selling breweries:\n\n#{Brewery.beers_sold_by_brewery[0..2].join("\n")}"
+        puts "\nThe 3 highest selling breweries:\n#{Brewery.beers_sold_by_brewery[0..2].join("\n")}"
     end
 
     def self.beers_sold_by_brewery
@@ -180,16 +175,16 @@ class Brewery < ActiveRecord::Base
 
     def self.print_top_selling_beer
         highest_selling_beer = Beer.best_seller
-        puts "\nThe top selling beer:\n\n#{highest_selling_beer.name} from #{highest_selling_beer.brewery.name} with #{highest_selling_beer.num_sold} sold"
+        puts "\nThe top selling beer:\n#{highest_selling_beer.name} from #{highest_selling_beer.brewery.name} with #{highest_selling_beer.num_sold} sold"
     end
 
     def self.print_highest_rated_beer
         top_rated_beer = Beer.highest_rated_beer
-        puts "\nThe highest rated beer:\n\n#{top_rated_beer.name} from #{top_rated_beer.brewery.name} with an average rating of #{top_rated_beer.average_rating}/5"
+        puts "\nThe highest rated beer:\n#{top_rated_beer.name} from #{top_rated_beer.brewery.name} with an average rating of #{top_rated_beer.average_rating}/5"
     end
 
     def self.print_most_produced_style
-        puts "\nThe most produced beer style:\n\n#{Brewery.most_produced_style[0]} with #{Brewery.most_produced_style[1]} beers"
+        puts "\nThe most produced beer style:\n#{Brewery.most_produced_style[0]} with #{Brewery.most_produced_style[1]} beers"
     end
 
     def self.most_produced_style

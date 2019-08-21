@@ -27,14 +27,14 @@ class Consumer < ActiveRecord::Base
     end
 
     # Beer Profile
-    
+
     def beer_profile
         TTY::Prompt.new.select("What do you want to see?") do |menu|
             menu.choice "My Fridge", -> {self.view_fridge}
             menu.choice "My Beer History", -> {self.beer_history_menu}
         end
     end
-    
+
     def beer_history_menu
         # what stats do we want to include? Full history(list of beers consumed), stats(top 3 most drank beers, highest rated beers, breweries)
         # probably need several methods
@@ -48,12 +48,13 @@ class Consumer < ActiveRecord::Base
     def fridge_contents
         self.consumer_beers.map { |consumer_beer| "#{consumer_beer.beer.name.pluralize}: #{consumer_beer.num_available}" }
     end
-    
+
     def view_fridge
         # display beers in a readable way with appropriate info
         #self.consumer_beers.each { |consumer_beer| puts "#{consumer_beer.num_available} #{consumer_beer.beer.name.pluralize}" }
-        puts "#{fridge_contents.join("\n")}"
-        
+        puts "\n#{self.name}'s Fridge:"
+        puts "\n#{fridge_contents.join("\n")}"
+
     end
 
     def beer_consumption
@@ -89,7 +90,8 @@ class Consumer < ActiveRecord::Base
     end
 
     def full_beer_history
-        puts "#{beer_consumption.join("\n")}"
+        puts "\n#{self.name}'s Beer History:"
+        puts "\n#{beer_consumption.join("\n")}"
     end
 
 
@@ -102,7 +104,7 @@ class Consumer < ActiveRecord::Base
             menu.choice "Drink beer", -> {self.drink_beer_menu}
         end
     end
-    
+
     def choose_beer_to_buy
         # add to num_available if ConsumerBeer instance exists or create new one
         brewery_choice = TTY::Prompt.new.select("What brewery?", Brewery.pluck(:name))
@@ -121,7 +123,7 @@ class Consumer < ActiveRecord::Base
             self.consumer_beers.find_by(beer_id: chosen_beer.id).update(num_available: new_num)
         end
     end
-    
+
     def drink_beer_menu
         TTY::Prompt.new.select("Would you like to drink from your fridge or go to the brewery?") do |menu|
             menu.choice "Drink from fridge", -> {self.choose_beer_from_fridge}
@@ -197,9 +199,9 @@ class Consumer < ActiveRecord::Base
             menu.choice "View #{other_user_name}'s quick stats", -> {other_user.quick_stats}
         end
     end
-    
+
     # view brewery info
-    
+
     def view_breweries
         brewery_choice = TTY::Prompt.new.select("What brewery?", Brewery.pluck(:name))
         brewery = Brewery.find_by(name: brewery_choice)
@@ -208,7 +210,7 @@ class Consumer < ActiveRecord::Base
             menu.choice "View Stats", -> {self.view_brewery_stats(brewery)}
         end
     end
-    
+
     def view_brewery_menu(brewery)
         puts "\n"
         puts "#{brewery.name}'s Beer Menu"
@@ -219,7 +221,7 @@ class Consumer < ActiveRecord::Base
     #     puts "#{beer.name}: #{num_sold} sold"
     # end
     # puts "#{brewery.average_rating_by_beer}: "
-    
+
     def view_brewery_stats(brewery)
         # most popular beer
         # average rating
@@ -235,14 +237,14 @@ class Consumer < ActiveRecord::Base
         puts "\n"
         puts "#{brewery.most_popular[0].name}"
     end
-    
+
     def print_brewery_rating(brewery)
         puts "\n"
         puts "#{brewery.name}'s Consumer Rating:"
         puts "\n"
         puts "#{brewery.brewery_rating}/5"
     end
-    
+
     def print_beers_sold(brewery)
         puts "\n"
         puts "Beer Sales:"
@@ -251,7 +253,7 @@ class Consumer < ActiveRecord::Base
             puts "#{beer.name}: #{num_sold} sold"
         end
     end
-    
+
     # delete account
 
     def delete_account
@@ -265,5 +267,5 @@ class Consumer < ActiveRecord::Base
         end
         exit!
     end
-    
+
 end

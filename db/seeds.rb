@@ -29,6 +29,7 @@ sierra_nevada = Brewery.create(name: "Sierra Nevada Brewing Co.", location: "Cal
 new_belgium = Brewery.create(name: "New Belgium Brewing Co.", location: "Colorado", specialty: "Belgian White", year_founded: 1988)
 bells = Brewery.create(name: "Bell's Brewery Inc.", location: "Michigan", specialty: "Wheat", year_founded: 1983)
 brooklyn = Brewery.create(name: "Brooklyn Brewery", location: "New York", specialty: "Lager", year_founded: 1987)
+threes = Brewery.create(name: "Threes Brewing", location: "New York", specialty: "Lager", year_founded: 2014)
 
 yuengling_golden = Beer.create(brewery_id: yuengling.id, name: "Yuengling Golden Pilsner", style: "Pilsner", additions: "", abv: 4.7)
 yuengling_lager = Beer.create(brewery_id: yuengling.id, name: "Yuengling Traditional Lager", style: "Lager", additions: "", abv: 4.5)

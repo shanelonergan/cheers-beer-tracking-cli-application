@@ -59,7 +59,9 @@ class Interface
   end
 
   def exit_app
+    puts ""
     puts "See you next time!"
+    puts ""
     exit!
   end
 end
