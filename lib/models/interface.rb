@@ -16,21 +16,21 @@ class Interface
 
   # Brewery User Path
 
-  # def self.handle_brewer
-  #   self.prompt.select("Are you a new or returning user?") do |menu|
-  #     menu.choice "New User", -> {Brewery.handle_new_brewer}
-  #     menu.choice "Returning User", -> {Brewery.handle_returning_brewer}
-  #   end
-  # end
+  def self.handle_brewer
+    self.prompt.select("Are you a new or returning user?") do |menu|
+      menu.choice "New User", -> {Brewery.handle_new_brewer}
+      menu.choice "Returning User", -> {Brewery.handle_returning_brewer}
+    end
+  end
 
-  # def main_brewery_menu
-  #   system "clear"
-  #   puts self.consumer.name
-  #   prompt.select("Hello #{self.user.name}, What could you like to do today?") do |menu|
-  #     menu.choice "See my popular beer", -> {Brewery.most_popular}
-  #     menu.choice "See my collection", -> {Brewery.beers}
-  #   end
-  # end
+  def main_brewery_menu
+    system "clear"
+    puts self.consumer.name
+    prompt.select("Hello #{self.user.name}, What could you like to do today?") do |menu|
+      menu.choice "See my popular beer", -> {Brewery.most_popular}
+      menu.choice "See my collection", -> {Brewery.beers}
+    end
+  end
 
   # Consumer User Path
 

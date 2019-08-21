@@ -3,6 +3,28 @@ class Brewery < ActiveRecord::Base
     has_many :consumer_beers, through: :beers
 
 
+    def display_beers
+        self.beers.each do |beer|
+            puts "#{beer.name}, #{beer.style}, #{beer.abv}% ABV"
+        end
+    end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     # def sold_beer_count
     #     # returns the number of beers bought for each of the brewery's beer instances
     #     count_hash = {}
@@ -45,9 +67,6 @@ class Brewery < ActiveRecord::Base
     # end
 
 
-    def display_beers
-        # display brewery's beers in a readable format with appropriate information - name, style, abv, etc.
-    end
 
     def num_beers_sold
     #     # returns the number of beers bought for each of the brewery's beer instances
