@@ -47,6 +47,7 @@ mb1 = ConsumerBeer.create(beer_id: oberon.id, consumer_id: matt.id, num_availabl
 mb2 = ConsumerBeer.create(beer_id: yuengling_golden.id, consumer_id: matt.id, num_available: 1, num_consumed: 4, size: 12, packaging: "bottle", exp_date: Date.new(2019,10,8), rating: 4.5)
 mb3 = ConsumerBeer.create(beer_id: defender.id, consumer_id: matt.id, num_available: 6, num_consumed: 12, size: 12, packaging: "bottle", exp_date: Date.new(2019,9,30), rating: 3.5)
 mb4 = ConsumerBeer.create(beer_id: sam_adams.id, consumer_id: matt.id, num_available: 6, num_consumed: 7, size: 12, packaging: "bottle", exp_date: Date.new(2019,9,19), rating: 2)
+sb1 = ConsumerBeer.create(beer_id: yuengling_golden.id, consumer_id: shane.id, num_available: 1, num_consumed: 19, size: 12, packaging: "bottle", exp_date: Date.new(2019,10,8))
 
 
 

@@ -1,13 +1,41 @@
 class Brewery < ActiveRecord::Base
     has_many :beers
     has_many :consumer_beers, through: :beers
-
-
+    
+    
     def display_beers
         self.beers.each do |beer|
-            puts "#{beer.name}: #{beer.style}, #{beer.abv}% ABV"
+            puts "#{beer.name}: #{beer.style}, #{beer.abv}% ABV, Consumer Rating: #{beer.average_rating}/5"
         end
     end
+    
+    def most_popular
+        #returns the beer instance of the brewery's most bought beer
+        self.sold_beer_count.sort_by {|beer, num_bought| num_bought}.last
+    end
+    
+    def sold_beer_count
+        # returns the number of beers bought for each of the brewery's beer instances
+        count_hash = {}
+        beers.each do |beer|
+            count_hash[beer] = (beer.consumer_beers.sum(:num_consumed) + beer.consumer_beers.sum(:num_available))
+        end
+        count_hash
+    end
+    
+    def average_rating_by_beer
+        # returns the average rating for each of the brewery's beer instances
+        rating_hash = {}
+        beers.each do |beer|
+            rating_hash[beer] = beer.average_rating
+        end
+        rating_hash
+    end
+
+    def brewery_rating
+        self.consumer_beers.average(:rating).to_f.floor(1)
+    end
+    
 
 
 
@@ -23,30 +51,6 @@ class Brewery < ActiveRecord::Base
 
 
 
-
-
-    # def sold_beer_count
-    #     # returns the number of beers bought for each of the brewery's beer instances
-    #     count_hash = {}
-    #     beers.each do |beer|
-    #         count_hash[beer] = (beer.consumer_beers.sum(:num_consumed) + beer.consumer_beers.sum(:num_available))
-    #     end
-    #     count_hash
-    # end
-
-    # # def average_rating_by_beer
-    # #     # returns the average rating for each of the brewery's beer instances
-    # #     rating_hash = {}
-    # #     beers.each do |beer|
-    # #         rating_hash[beer] = beer.average_rating
-    # #     end
-    # #     rating_hash
-    # # end
-
-    # def most_popular
-    #     #returns the beer instance of the brewery's most bought beer
-    #     self.sold_beer_count.sort_by {|beer, num_bought| num_bought}.last
-    # end
 
     # def least_popular
     #     #returns the beer instance of brewery's least bought beer
