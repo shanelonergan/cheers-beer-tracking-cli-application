@@ -10,7 +10,7 @@ end
 if user_object.class == Consumer
   cli.consumer = user_object
   cli.main_consumer_menu
-else 
+else
   cli.brewery = user_object
   cli.main_brewery_menu
 end
@@ -20,7 +20,7 @@ loop do
   user_object.reload
   if user_object.class == Consumer
     cli.main_consumer_menu
-  else 
+  else
     cli.main_brewery_menu
   end
 end
