@@ -44,6 +44,13 @@ class Brewery < ActiveRecord::Base
             puts "#{beer.name}: #{beer.style}, #{beer.abv}% ABV, Consumer Rating: #{beer.average_rating}/5"
         end
     end
+
+    def view_brewery_menu
+        puts "\n"
+        puts "#{self.name}'s Beer Menu"
+        puts "\n"
+        self.display_beers
+    end
     
     def most_popular
         #returns the beer instance of the brewery's most bought beer
