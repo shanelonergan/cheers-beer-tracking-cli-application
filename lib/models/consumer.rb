@@ -197,7 +197,26 @@ class Consumer < ActiveRecord::Base
         end
     end
 
+    # view brewery info
 
+    def view_breweries
+        brewery_choice = TTY::Prompt.new.select("What brewery?", Brewery.pluck(:name))
+        brewery = Brewery.find_by(name: brewery_choice)
+        TTY::Prompt.new.select("What information would you like to see about #{brewery_choice}?") do |menu|
+            menu.choice "View Menu", -> {self.view_brewery_menu(brewery)}
+            menu.choice "View Stats", -> {self.view_brewery_stats(brewery)}
+        end
+    end
+
+    def view_brewery_menu(brewery)
+        puts "\n"
+        puts "#{brewery.name}'s Beer Menu"
+        puts "\n"
+        brewery.display_beers
+    end
+
+    def view_brewery_stats
+    end
 
     # delete account
 

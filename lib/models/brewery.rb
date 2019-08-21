@@ -5,7 +5,7 @@ class Brewery < ActiveRecord::Base
 
     def display_beers
         self.beers.each do |beer|
-            puts "#{beer.name}, #{beer.style}, #{beer.abv}% ABV"
+            puts "#{beer.name}: #{beer.style}, #{beer.abv}% ABV"
         end
     end
 
