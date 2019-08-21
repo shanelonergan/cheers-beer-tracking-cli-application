@@ -1,6 +1,6 @@
 class Beer < ActiveRecord::Base
     belongs_to :brewery
-    has_many :consumer_beers
+    has_many :consumer_beers, dependent: :destroy
     has_many :consumers, through: :consumer_beers
 
 

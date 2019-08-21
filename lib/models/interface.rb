@@ -30,6 +30,7 @@ class Interface
       menu.choice "See my menu", -> {self.brewery.view_brewery_menu}
       menu.choice "Update my menu", -> {self.brewery.update_menu}
       menu.choice "See my stats", -> {self.brewery.view_brewery_stats}
+      menu.choice "Industry stats", -> {Brewery.industry_stats}
       menu.choice "Delete my account", -> {self.brewery.delete_account}
       menu.choice "Exit", -> {self.exit_app}
     end
