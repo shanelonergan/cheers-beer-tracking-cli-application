@@ -18,10 +18,10 @@ class Consumer < ActiveRecord::Base
     end
 
     def self.handle_new_consumer
-        name = TTY::Prompt.new.ask("Welcome to our program! What is your name?")
-        age = TTY::Prompt.new.ask("What is your age?")
-        location = TTY::Prompt.new.ask("Where do you live?")
-        gender = TTY::Prompt.new.select("What is your gender?", ["Male", "Female"])
+        name = TTY::Prompt.new.ask("Welcome to our program! What is your name?").capitalize
+        age = TTY::Prompt.new.ask("What is your age?") { |q| q.in('21-130') }
+        location = TTY::Prompt.new.ask("Where do you live?").capitalize
+        gender = TTY::Prompt.new.select("What is your gender?", ["Male", "Female", "Other"])
         favorite_style = TTY::Prompt.new.select("What is your favorite style of beer?",
             ["Gose",
             "IPA",
