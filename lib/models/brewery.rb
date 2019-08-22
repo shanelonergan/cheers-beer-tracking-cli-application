@@ -10,9 +10,9 @@ class Brewery < ActiveRecord::Base
     end
 
     def self.handle_new_brewery
-        name = TTY::Prompt.new.ask("Welcome to our program! What is your brewery's name?")
-        location = TTY::Prompt.new.ask("Where are you located?")
-        year_founded = TTY::Prompt.new.ask("What year were you founded?")
+        name = TTY::Prompt.new.ask("Welcome to our program! What is your brewery's name?").capitalize
+        location = TTY::Prompt.new.ask("Where are you located?").capitalize
+        year_founded = TTY::Prompt.new.ask("What year were you founded?") { |q| q.in('1000-3000') }
         specialty = TTY::Prompt.new.select("What style do you specialize in?",
           ["Gose",
           "IPA",
