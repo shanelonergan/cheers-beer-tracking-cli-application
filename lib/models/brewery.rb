@@ -41,7 +41,11 @@ class Brewery < ActiveRecord::Base
 
     def display_beers
         self.beers.each do |beer|
-            puts "#{beer.name}: #{beer.style}, #{beer.abv}% ABV, Consumer Rating: #{beer.average_rating}/5"
+          if beer.additions == "" || beer.additions == nil
+            puts "#{beer.name}: #{beer.style}; #{beer.abv}% ABV; Consumer Rating: #{beer.average_rating}/5"
+          else
+            puts "#{beer.name}: #{beer.style} with #{beer.additions}; #{beer.abv}% ABV; Consumer Rating: #{beer.average_rating}/5"
+          end
         end
     end
 
@@ -137,8 +141,10 @@ class Brewery < ActiveRecord::Base
         confirm = TTY::Prompt.new.select("Are you sure?", ["Yes", "No"])
         if confirm == "Yes"
             chosen_beer.destroy
+            puts "\n#{chosen_beer.name} has been removed from your menu\n"
+        else
+            puts "\nNothing has been removed\n"
         end
-        puts "\n#{chosen_beer.name} has been removed from your menu\n"
     end
 
     def self.industry_stats

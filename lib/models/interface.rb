@@ -26,7 +26,7 @@ class Interface
   def main_brewery_menu
     system "clear"
     puts self.brewery.name
-    prompt.select("Hello #{self.brewery.name}, What could you like to do today?") do |menu|
+    prompt.select("Hello #{self.brewery.name}, what would you like to do today?") do |menu|
       menu.choice "See my menu", -> {self.brewery.view_brewery_menu}
       menu.choice "Update my menu", -> {self.brewery.update_menu}
       menu.choice "See my stats", -> {self.brewery.view_brewery_stats}
