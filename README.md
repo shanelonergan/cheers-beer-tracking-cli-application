@@ -31,6 +31,13 @@
 
 
 ---
+
 * ##### [Link to Screenshots](https://github.com/mrwerner392/module-one-final-project-guidelines-dumbo-web-080519/blob/master/SCREENSHOTS.md)
 * ##### [Contributor Guidelines](https://github.com/mrwerner392/module-one-final-project-guidelines-dumbo-web-080519/blob/master/CONTRIBUTING.md)
 * ##### [License Information](https://github.com/mrwerner392/module-one-final-project-guidelines-dumbo-web-080519/blob/master/LICENSE.md)
+
+---
+
+### Video Description:
+
+##### [![Link to video description](https://img.youtube.com/vi/ti4qthiNXe4/0.jpg)](https://www.youtube.com/watch?v=ti4qthiNXe4&feature=youtu.be)
