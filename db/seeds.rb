@@ -17,7 +17,7 @@ sukrit = Consumer.create(name: "Sukrit", age: 90, location: "New York", gender: 
 brooklyn = Brewery.create(name: "Brooklyn Brewery", location: "New York", specialty: "Lager", year_founded: 1987)
 finback = Brewery.create(name: "Finback Brewery", location: "New York", specialty: "Sour", year_founded: 2011)
 five_boroughs = Brewery.create(name: "Five Boroughs Brewing Co.", location: "New York", specialty: "IPA", year_founded: 2015)
-kcbc = Brewery.create(name: "King's Country Brewers Collective", location: "New York", specialty: "IPA", year_founded: 2016)
+kcbc = Brewery.create(name: "King's County Brewers Collective", location: "New York", specialty: "IPA", year_founded: 2016)
 threes = Brewery.create(name: "Threes Brewing", location: "New York", specialty: "Lager", year_founded: 2014)
 
 # Beers
@@ -25,7 +25,7 @@ threes = Brewery.create(name: "Threes Brewing", location: "New York", specialty:
 bk_defender = Beer.create(brewery_id: brooklyn.id, name: "Defender IPA", style: "API", additions: "", abv: 5.5)
 bk_lager = Beer.create(brewery_id: brooklyn.id, name: "Brooklyn Lager", style: "Lager", additions: "", abv: 5.2)
 bk_sour = Beer.create(brewery_id: brooklyn.id, name: "Brooklyn Bel Air Sour", style: "Sour", additions: "", abv: 5.8)
-finback_ipa = Beer.create(brewery_id: finback.id, name: "Finback IPA", style: "Sour", additions: "", abv: 7.2)
+finback_ipa = Beer.create(brewery_id: finback.id, name: "Finback IPA", style: "IPA", additions: "", abv: 7.2)
 finback_starchild = Beer.create(brewery_id: finback.id, name: "Starchild", style: "Sour", additions: "grapefruit peel", abv: 4.6)
 finback_universe = Beer.create(brewery_id: finback.id, name: "I Feel The Universe", style: "Gose", additions: "passion fruit", abv: 11)
 fb_lager = Beer.create(brewery_id: five_boroughs.id, name: "Hoppy Lager", style: "Lager", additions: "", abv: 6.8)
@@ -35,7 +35,7 @@ robot_fish = Beer.create(brewery_id: kcbc.id, name: "Robot Fish", style: "IPA", 
 fairy = Beer.create(brewery_id: kcbc.id, name: "Lemon Berry Cherry Fairy", style: "Gose", additions: "lemon, strawberry, blackberry, and cherry", abv: 4.5)
 burritonado = Beer.create(brewery_id: kcbc.id, name: "Burritonado", style: "IPA", additions: "apricot, strawberry, and lime", abv: 6.9)
 conclusion = Beer.create(brewery_id: threes.id, name: "Logical Conclusion", style: "IPA", additions: "", abv: 7)
-no_more = Beer.create(brewery_id: threes.id, name: "Everything Was Forver Until It Was No More", style: "Stout", additions: "", abv: 8.5)
+no_more = Beer.create(brewery_id: threes.id, name: "Everything Was Forever Until It Was No More", style: "Stout", additions: "", abv: 8.5)
 vliet = Beer.create(brewery_id: threes.id, name: "Vliet", style: "Pilsner", additions: "", abv: 5.2)
 
 
@@ -54,12 +54,14 @@ sb4 = ConsumerBeer.create(beer_id: burritonado.id, consumer_id: shane.id, num_av
 sb5 = ConsumerBeer.create(beer_id: fb_juicy.id, consumer_id: shane.id, num_available: 8, num_consumed: 20, size: 12, packaging: "can", rating: 3.5)
 sb6 = ConsumerBeer.create(beer_id: finback_starchild.id, consumer_id: shane.id, num_available: 4, num_consumed: 4, size: 12, packaging: "can", rating: 4)
 sb7 = ConsumerBeer.create(beer_id: finback_ipa.id, consumer_id: shane.id, num_available: 2, num_consumed: 2, size: 12, packaging: "can", rating: 3)
+
 jb1 = ConsumerBeer.create(beer_id: robot_fish.id, consumer_id: josh.id, num_available: 4, num_consumed: 4, size: 12, packaging: "can", rating: 4.5)
 jb2 = ConsumerBeer.create(beer_id: fb_juicy.id, consumer_id: josh.id, num_available: 8, num_consumed: 4, size: 12, packaging: "can", rating: 3.5)
 jb3 = ConsumerBeer.create(beer_id: vliet.id, consumer_id: josh.id, num_available: 4, num_consumed: 35, size: 12, packaging: "can", rating: 4)
 jb4 = ConsumerBeer.create(beer_id: bk_lager.id, consumer_id: josh.id, num_available: 1, num_consumed: 5, size: 12, packaging: "bottle", rating: 3)
 jb5 = ConsumerBeer.create(beer_id: bk_sour.id, consumer_id: josh.id, num_available: 5, num_consumed: 1, size: 12, packaging: "bottle", rating: 3.5)
 jb5 = ConsumerBeer.create(beer_id: bk_sour.id, consumer_id: josh.id, num_available: 5, num_consumed: 1, size: 12, packaging: "bottle", rating: 3.5)
+
 skb1 = ConsumerBeer.create(beer_id: fb_juicy.id, consumer_id: sukrit.id, num_available: 5, num_consumed: 13, size: 12, packaging: "can", rating: 3.5)
 skb2 = ConsumerBeer.create(beer_id: robot_fish.id, consumer_id: sukrit.id, num_available: 5, num_consumed: 3, size: 12, packaging: "can", rating: 5)
 skb3 = ConsumerBeer.create(beer_id: no_more.id, consumer_id: sukrit.id, num_available: 3, num_consumed: 1, size: 12, packaging: "can", rating: 4.5)

@@ -83,7 +83,7 @@ class Consumer < ActiveRecord::Base
         brewery_consumed_count.each do |brew_hash|
             frequency_hash[brew_hash.keys.first] += brew_hash.values.first
         end
-        frequency_hash
+        frequency_hash.sort_by{ |brewery, count| count }.reverse
     end
 
     def print_brewery_frequency
