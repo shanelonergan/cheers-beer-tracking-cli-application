@@ -28,12 +28,6 @@ class Brewery < ActiveRecord::Base
     def delete_account
         confirm = TTY::Prompt.new.select("Are you sure you want to delete your account?", ["Yes", "No"])
         if confirm == "Yes"
-            # ConsumerBeer.all.each do |cbeer|
-            #     cbeer.destroy if cbeer.beer.brewery_id == self.id
-            # end
-            # Beer.all.each do |beer|
-            #     beer.destroy if beer.brewery_id == self.id
-            # end
             self.destroy
             puts "Sorry to see you go!"
         end

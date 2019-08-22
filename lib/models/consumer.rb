@@ -55,8 +55,6 @@ class Consumer < ActiveRecord::Base
     end
 
     def view_fridge
-        # display beers in a readable way with appropriate info
-        #self.consumer_beers.each { |consumer_beer| puts "#{consumer_beer.num_available} #{consumer_beer.beer.name.pluralize}" }
         puts "\n#{self.name}'s Fridge:"
         if fridge_contents == []
           puts "\n🍺 This fridge is empty! 🍺"
@@ -235,16 +233,12 @@ class Consumer < ActiveRecord::Base
           brewery.display_beers
         end
     end
-    # brewery.average_rating_by_beer.each do |beer, rating|
-    #     puts "#{beer.name}: #{num_sold} sold"
-    # end
-    # puts "#{brewery.average_rating_by_beer}: "
 
     def view_brewery_stats(brewery)
         # most popular beer
         # average rating
         # beers sold
-        if brewery.consumer_beers = []
+        if brewery.consumer_beers == []
           puts "\n#{brewery.name} hasn't sold any beers yet"
         else
           self.print_brewery_rating(brewery)
