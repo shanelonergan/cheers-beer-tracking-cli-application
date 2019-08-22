@@ -14,11 +14,14 @@ class Brewery < ActiveRecord::Base
         location = TTY::Prompt.new.ask("Where are you located?")
         year_founded = TTY::Prompt.new.ask("What year were you founded?")
         specialty = TTY::Prompt.new.select("What style do you specialize in?",
-            ["Lager",
-            "Pilsner",
-            "IPA",
-            "Sour",
-            "Stout"])
+          ["Gose",
+          "IPA",
+          "Lager",
+          "Pilsner",
+          "Porter",
+          "Sour",
+          "Stout",
+          "White Ale"])
         Brewery.create(name: name, location: location, year_founded: year_founded, specialty: specialty)
     end
 
@@ -125,8 +128,16 @@ class Brewery < ActiveRecord::Base
 
     def add_beer
         name = TTY::Prompt.new.ask("What is your new beer's name?")
-        style = TTY::Prompt.new.ask("What style is this beer?")
-        abv = TTY::Prompt.new.ask("What is the ABV content?")
+        style = TTY::Prompt.new.select("What style is this beer?",
+        ["Gose",
+        "IPA",
+        "Lager",
+        "Pilsner",
+        "Porter",
+        "Sour",
+        "Stout",
+        "White Ale"])
+        abv = TTY::Prompt.new.ask("What is the ABV content?") { |q| q.in('0-100') }
         new_beer = Beer.create(name: name, style: style, abv: abv, brewery: self)
         puts "\n#{new_beer.name} has been added to your menu!"
     end
