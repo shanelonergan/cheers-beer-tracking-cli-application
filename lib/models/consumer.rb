@@ -62,8 +62,11 @@ class Consumer < ActiveRecord::Base
         # display beers in a readable way with appropriate info
         #self.consumer_beers.each { |consumer_beer| puts "#{consumer_beer.num_available} #{consumer_beer.beer.name.pluralize}" }
         puts "\n#{self.name}'s Fridge:"
-        puts "\n#{fridge_contents.join("\n")}"
-
+        if fridge_contents == []
+          puts "\n🍺 Your fridge is empty! Buy some beer! 🍺"
+        else
+          puts "\n#{fridge_contents.join("\n")}"
+        end
     end
 
     def beer_consumption
