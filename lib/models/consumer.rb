@@ -23,11 +23,14 @@ class Consumer < ActiveRecord::Base
         location = TTY::Prompt.new.ask("Where do you live?")
         gender = TTY::Prompt.new.select("What is your gender?", ["Male", "Female"])
         favorite_style = TTY::Prompt.new.select("What is your favorite style of beer?",
-            ["Lager",
-            "Pilsner",
+            ["Gose",
             "IPA",
+            "Lager",
+            "Pilsner",
+            "Porter",
             "Sour",
-            "Stout"])
+            "Stout",
+            "White Ale"])
         Consumer.create(name: name, age: age, location: location, gender: gender, favorite_style: favorite_style)
     end
 
