@@ -65,7 +65,7 @@ class Consumer < ActiveRecord::Base
 
     def beer_consumption
         beer_consumed = self.consumer_beers.sort_by { |beer| beer.num_consumed }.reverse
-        beer_consumed.map {|consumer_beer| "#{consumer_beer.beer.name}: #{consumer_beer.num_consumed}"}
+        beer_consumed.map {|consumer_beer| "#{consumer_beer.beer.name} from #{consumer_beer.brewery.name}: #{consumer_beer.num_consumed} drank"}
     end
 
     def beer_ratings
@@ -148,16 +148,16 @@ class Consumer < ActiveRecord::Base
         # creates new ConsumerBeer instance with num_consumed = 1 and num_available = 0
         # or increases num_consumed by 1 for existing ConsumerBeer instance
         if !self.consumer_beers.find_by(beer_id: beer.id)
-            rating = TTY::Prompt.new.ask("Rate this beer from 1-5").to_f
+            rating = TTY::Prompt.new.ask("Rate this beer from 0-5") { |q| q.in('0-5') }
             ConsumerBeer.create(beer_id: beer.id, consumer_id: self.id, num_available: 0, num_consumed: 1, rating: rating)
         else
             current_cbeer = self.consumer_beers.find_by(beer_id: beer.id)
             if !current_cbeer.rating
-                rating = TTY::Prompt.new.ask("Rate this beer from 1-5").to_f
+                rating = TTY::Prompt.new.ask("Rate this beer from 0-5") { |q| q.in('0-5') }
             else
                 update_rating = TTY::Prompt.new.select("Do you want to change your current rating of #{current_cbeer.rating}?", ["Yes", "No"])
                 if update_rating == "Yes"
-                    rating = TTY::Prompt.new.ask("Rate this beer from 1-5").to_f
+                    rating = TTY::Prompt.new.ask("Rate this beer from 0-5") { |q| q.in('0-5') }
                 else
                     rating = current_cbeer.rating
                 end
@@ -180,11 +180,11 @@ class Consumer < ActiveRecord::Base
         # finds ConsumerBeer instance, increases num_consumed by 1, decreases num_available by 1
         current_beer = self.consumer_beers.find_by(beer_id: beer.id)
         if !current_beer.rating
-            rating = TTY::Prompt.new.ask("Rate this beer from 1-5").to_f
+            rating = TTY::Prompt.new.ask("Rate this beer from 0-5") { |q| q.in('0-5') }
         else
             update_rating = TTY::Prompt.new.select("Do you want to change your current rating of #{current_beer.rating}?", ["Yes", "No"])
             if update_rating == "Yes"
-                rating = TTY::Prompt.new.ask("Rate this beer from 1-5").to_f
+                rating = TTY::Prompt.new.ask("Rate this beer from 0-5") { |q| q.in('0-5') }
             else
                 rating = current_beer.rating
             end
@@ -198,7 +198,7 @@ class Consumer < ActiveRecord::Base
     # see other users info
 
     def view_other_users
-        other_user_name = TTY::Prompt.new.select("Which fellow drinker would you like to see more about?", Consumer.pluck(:name))
+        other_user_name = TTY::Prompt.new.select("Which fellow drinker would you like to see more about?", Consumer.where.not(name: self.name).pluck(:name))
         other_user = Consumer.find_by(name: other_user_name)
         TTY::Prompt.new.select("What would you like to see about #{other_user_name}?") do |menu|
             menu.choice "View #{other_user_name}'s fridge", -> {other_user.view_fridge}
