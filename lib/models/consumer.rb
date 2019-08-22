@@ -116,7 +116,8 @@ class Consumer < ActiveRecord::Base
 
     def choose_beer_to_buy
         # add to num_available if ConsumerBeer instance exists or create new one
-        brewery_choice = TTY::Prompt.new.select("What brewery?", Brewery.pluck(:name))
+        breweries_with_beers = Brewery.all.select {|brewery| brewery.beers != []}
+        brewery_choice = TTY::Prompt.new.select("What brewery?", breweries_with_beers.pluck(:name))
         beer_choice = TTY::Prompt.new.select("What beer?", Brewery.find_by(name: brewery_choice).beers.pluck(:name))
         beer = Beer.find_by(name: beer_choice)
         quantity = TTY::Prompt.new.ask("How many?").to_i
@@ -141,7 +142,8 @@ class Consumer < ActiveRecord::Base
     end
 
     def choose_beer_from_brewery
-        brewery_choice = TTY::Prompt.new.select("What brewery?", Brewery.pluck(:name))
+        breweries_with_beers = Brewery.all.select {|brewery| brewery.beers != []}
+        brewery_choice = TTY::Prompt.new.select("What brewery?", breweries_with_beers.pluck(:name))
         beer_choice = TTY::Prompt.new.select("What beer?", Brewery.find_by(name: brewery_choice).beers.pluck(:name))
         chosen_beer = Beer.find_by(name: beer_choice)
         drink_beer_from_brewery(chosen_beer)
@@ -224,7 +226,11 @@ class Consumer < ActiveRecord::Base
         puts "\n"
         puts "#{brewery.name}'s Beer Menu"
         puts "\n"
-        brewery.display_beers
+        if brewery.beers == []
+          puts "#{brewery.name} has no beers"
+        else
+          brewery.display_beers
+        end
     end
     # brewery.average_rating_by_beer.each do |beer, rating|
     #     puts "#{beer.name}: #{num_sold} sold"
@@ -235,9 +241,13 @@ class Consumer < ActiveRecord::Base
         # most popular beer
         # average rating
         # beers sold
-        self.print_brewery_rating(brewery)
-        self.print_most_popular(brewery)
-        self.print_beers_sold(brewery)
+        if brewery.consumer_beers = []
+          puts "\n#{brewery.name} hasn't sold any beers yet"
+        else
+          self.print_brewery_rating(brewery)
+          self.print_most_popular(brewery)
+          self.print_beers_sold(brewery)
+        end
     end
 
     def print_most_popular(brewery)

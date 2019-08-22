@@ -43,20 +43,24 @@ class Brewery < ActiveRecord::Base
     # Data Methods
 
     def display_beers
-        self.beers.each do |beer|
-          if beer.additions == "" || beer.additions == nil
-            puts "#{beer.name}: #{beer.style}; #{beer.abv}% ABV; Consumer Rating: #{beer.average_rating}/5"
-          else
-            puts "#{beer.name}: #{beer.style} with #{beer.additions}; #{beer.abv}% ABV; Consumer Rating: #{beer.average_rating}/5"
-          end
+      self.beers.each do |beer|
+        if beer.additions == "" || beer.additions == nil
+          puts "#{beer.name}: #{beer.style}; #{beer.abv}% ABV; Consumer Rating: #{beer.average_rating}/5"
+        else
+          puts "#{beer.name}: #{beer.style} with #{beer.additions}; #{beer.abv}% ABV; Consumer Rating: #{beer.average_rating}/5"
         end
+      end
     end
 
     def view_brewery_menu
         puts "\n"
         puts "#{self.name}'s Beer Menu"
         puts "\n"
-        self.display_beers
+        if self.beers == []
+          puts "You don't have any beers yet. Add a beer to get started."
+        else
+          self.display_beers
+        end
     end
 
     def most_popular
@@ -94,9 +98,13 @@ class Brewery < ActiveRecord::Base
         # most popular beer
         # average rating
         # beers sold
-        self.print_brewery_rating
-        self.print_most_popular
-        self.print_beers_sold
+        if self.consumer_beers = []
+          puts "\nYou haven't sold any beers yet"
+        else
+          self.print_brewery_rating
+          self.print_most_popular
+          self.print_beers_sold
+        end
     end
 
     def print_most_popular
@@ -143,9 +151,13 @@ class Brewery < ActiveRecord::Base
     end
 
     def choose_remove_beer
+      if self.beers == []
+        puts "\nYou don't have any beers"
+      else
         beer_choice = TTY::Prompt.new.select("What beer do you want to remove?", self.beers.pluck(:name))
         chosen_beer = Beer.find_by(name: beer_choice)
         remove_beer(chosen_beer)
+      end
     end
 
     def remove_beer(chosen_beer)
