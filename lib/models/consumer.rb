@@ -2,10 +2,6 @@ class Consumer < ActiveRecord::Base
     has_many :consumer_beers, dependent: :destroy
     has_many :beers, through: :consumer_beers
 
-    # def figure_out_popular_beer
-    #     self.consumer_beers
-    # end
-
     def self.handle_returning_consumer
         puts "Welcome back! What is your name?"
         name = gets.chomp.capitalize
