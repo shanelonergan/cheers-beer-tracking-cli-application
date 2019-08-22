@@ -63,7 +63,7 @@ class Consumer < ActiveRecord::Base
         #self.consumer_beers.each { |consumer_beer| puts "#{consumer_beer.num_available} #{consumer_beer.beer.name.pluralize}" }
         puts "\n#{self.name}'s Fridge:"
         if fridge_contents == []
-          puts "\n🍺 Your fridge is empty! Buy some beer! 🍺"
+          puts "\n🍺 This fridge is empty! 🍺"
         else
           puts "\n#{fridge_contents.join("\n")}"
         end
@@ -178,10 +178,14 @@ class Consumer < ActiveRecord::Base
 
     def choose_beer_from_fridge
         # provide list of beers in fridge
-        beer_choice = TTY::Prompt.new.select("What beer?", fridge_contents)
-        beer_name = beer_choice.split(": ")
-        current_cbeer = Beer.find_by(name: beer_name[0].singularize)
-        drink_beer_from_fridge(current_cbeer)
+        if fridge_contents == []
+            puts "\n🍺 This fridge is empty! Buy some beer! 🍺"
+        else
+            beer_choice = TTY::Prompt.new.select("What beer?", fridge_contents)
+            beer_name = beer_choice.split(": ")
+            current_cbeer = Beer.find_by(name: beer_name[0].singularize)
+            drink_beer_from_fridge(current_cbeer)
+        end
     end
 
     def drink_beer_from_fridge(beer)
