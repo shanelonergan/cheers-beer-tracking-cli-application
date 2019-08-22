@@ -98,7 +98,7 @@ class Brewery < ActiveRecord::Base
         # most popular beer
         # average rating
         # beers sold
-        if self.consumer_beers = []
+        if self.consumer_beers == []
           puts "\nYou haven't sold any beers yet"
         else
           self.print_brewery_rating
