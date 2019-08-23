@@ -60,7 +60,6 @@ jb2 = ConsumerBeer.create(beer_id: fb_juicy.id, consumer_id: josh.id, num_availa
 jb3 = ConsumerBeer.create(beer_id: vliet.id, consumer_id: josh.id, num_available: 4, num_consumed: 35, size: 12, packaging: "can", rating: 4)
 jb4 = ConsumerBeer.create(beer_id: bk_lager.id, consumer_id: josh.id, num_available: 1, num_consumed: 5, size: 12, packaging: "bottle", rating: 3)
 jb5 = ConsumerBeer.create(beer_id: bk_sour.id, consumer_id: josh.id, num_available: 5, num_consumed: 1, size: 12, packaging: "bottle", rating: 3.5)
-jb5 = ConsumerBeer.create(beer_id: bk_sour.id, consumer_id: josh.id, num_available: 5, num_consumed: 1, size: 12, packaging: "bottle", rating: 3.5)
 
 skb1 = ConsumerBeer.create(beer_id: fb_juicy.id, consumer_id: sukrit.id, num_available: 5, num_consumed: 13, size: 12, packaging: "can", rating: 3.5)
 skb2 = ConsumerBeer.create(beer_id: robot_fish.id, consumer_id: sukrit.id, num_available: 5, num_consumed: 3, size: 12, packaging: "can", rating: 5)
