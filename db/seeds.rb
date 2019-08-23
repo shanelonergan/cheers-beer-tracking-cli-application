@@ -22,7 +22,7 @@ threes = Brewery.create(name: "Threes Brewing", location: "New York", specialty:
 
 # Beers
 
-bk_defender = Beer.create(brewery_id: brooklyn.id, name: "Defender IPA", style: "API", additions: "", abv: 5.5)
+bk_defender = Beer.create(brewery_id: brooklyn.id, name: "Defender IPA", style: "IPA", additions: "", abv: 5.5)
 bk_lager = Beer.create(brewery_id: brooklyn.id, name: "Brooklyn Lager", style: "Lager", additions: "", abv: 5.2)
 bk_sour = Beer.create(brewery_id: brooklyn.id, name: "Brooklyn Bel Air Sour", style: "Sour", additions: "", abv: 5.8)
 finback_ipa = Beer.create(brewery_id: finback.id, name: "Finback IPA", style: "IPA", additions: "", abv: 7.2)
