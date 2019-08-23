@@ -19,14 +19,7 @@ class Consumer < ActiveRecord::Base
         location = TTY::Prompt.new.ask("Where do you live?").capitalize
         gender = TTY::Prompt.new.select("What is your gender?", ["Male", "Female", "Other"])
         favorite_style = TTY::Prompt.new.select("What is your favorite style of beer?",
-            ["Gose",
-            "IPA",
-            "Lager",
-            "Pilsner",
-            "Porter",
-            "Sour",
-            "Stout",
-            "White Ale"])
+            Beer.beer_styles, per_page: 8)
         Consumer.create(name: name, age: age, location: location, gender: gender, favorite_style: favorite_style)
     end
 
@@ -73,6 +66,8 @@ class Consumer < ActiveRecord::Base
         beer_rating = beers_with_rating.sort_by { |beer| beer.rating }.reverse
         beer_rating.map {|consumer_beer| "#{consumer_beer.beer.name}: #{consumer_beer.rating}"}
     end
+
+    #Tough Methods
 
     def brewery_consumed_count
         self.consumer_beers.map {|consumer_beer| {consumer_beer.brewery => consumer_beer.num_consumed}}
@@ -175,7 +170,7 @@ class Consumer < ActiveRecord::Base
         if fridge_contents == []
             puts "\n🍺 This fridge is empty! Buy some beer! 🍺"
         else
-            beer_choice = TTY::Prompt.new.select("What beer?", fridge_contents)
+            beer_choice = TTY::Prompt.new.select("What beer?", fridge_contents, per_page: 10)
             beer_name = beer_choice.split(": ")
             current_cbeer = Beer.find_by(name: beer_name[0].singularize)
             drink_beer_from_fridge(current_cbeer)
