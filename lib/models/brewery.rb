@@ -39,9 +39,7 @@ class Brewery < ActiveRecord::Base
     end
 
     def view_brewery_menu
-        puts "\n"
-        puts "#{self.name}'s Beer Menu"
-        puts "\n"
+        puts "\n#{self.name}'s Beer Menu\n\n"
         if self.beers == []
           puts "You don't have any beers yet. Add a beer to get started."
         else
@@ -94,20 +92,17 @@ class Brewery < ActiveRecord::Base
     end
 
     def print_most_popular
-        puts "\n"
-        puts "Most Popular Beer:"
+        puts "\nMost Popular Beer:"
         puts "#{self.most_popular[0].name}"
     end
 
     def print_brewery_rating
-        puts "\n"
-        puts "#{self.name}'s Consumer Rating:"
+        puts "\n#{self.name}'s Consumer Rating:"
         puts "#{self.brewery_rating}/5"
     end
 
     def print_beers_sold
-        puts "\n"
-        puts "Beer Sales:"
+        puts "\nBeer Sales:"
         self.sold_beer_count.each do |beer, num_sold|
             puts "#{beer.name}: #{num_sold} sold"
         end
