@@ -152,6 +152,20 @@ class Consumer < ActiveRecord::Base
         drink_beer_from_brewery(chosen_beer)
     end
 
+    def update_rating(beer)
+        current_cbeer = self.consumer_beers.find_by(beer_id: beer.id)
+        if !current_cbeer.rating
+          self.rate_beer
+        else
+          update_rating = TTY::Prompt.new.select("Do you want to change your current rating of #{current_cbeer.rating}?", ["Yes", "No"])
+          if update_rating == "Yes"
+              self.rate_beer
+          else
+              current_cbeer.rating
+          end
+        end
+    end
+
     def drink_beer_from_brewery(beer)
         # creates new ConsumerBeer instance with num_consumed = 1 and num_available = 0
         # or increases num_consumed by 1 for existing ConsumerBeer instance
@@ -159,21 +173,10 @@ class Consumer < ActiveRecord::Base
             rating = self.rate_beer
             ConsumerBeer.create(beer_id: beer.id, consumer_id: self.id, num_available: 0, num_consumed: 1, rating: rating)
         else
-            current_cbeer = self.consumer_beers.find_by(beer_id: beer.id)
-            if !current_cbeer.rating
-                rating = self.rate_beer
-            else
-                update_rating = TTY::Prompt.new.select("Do you want to change your current rating of #{current_cbeer.rating}?", ["Yes", "No"])
-                if update_rating == "Yes"
-                    rating = self.rate_beer
-                else
-                    rating = current_cbeer.rating
-                end
-            end
+            rating = self.update_rating(beer)
             new_num = self.consumer_beers.find_by(beer_id: beer.id).num_consumed + 1
             self.consumer_beers.find_by(beer_id: beer.id).update(num_consumed: new_num, rating: rating)
         end
-
     end
 
     def choose_beer_from_fridge
@@ -183,28 +186,19 @@ class Consumer < ActiveRecord::Base
         else
             beer_choice = TTY::Prompt.new.select("What beer?", fridge_contents, per_page: 10)
             beer_name = beer_choice.split(": ")
-            current_cbeer = Beer.find_by(name: beer_name[0].singularize)
-            drink_beer_from_fridge(current_cbeer)
+            current_beer = Beer.find_by(name: beer_name[0].singularize)
+            drink_beer_from_fridge(current_beer)
         end
     end
 
     def drink_beer_from_fridge(beer)
         # finds ConsumerBeer instance, increases num_consumed by 1, decreases num_available by 1
-        current_beer = self.consumer_beers.find_by(beer_id: beer.id)
-        if !current_beer.rating
-            rating = self.rate_beer
-        else
-            update_rating = TTY::Prompt.new.select("Do you want to change your current rating of #{current_beer.rating}?", ["Yes", "No"])
-            if update_rating == "Yes"
-                rating = self.rate_beer
-            else
-                rating = current_beer.rating
-            end
-        end
-        new_num_available = current_beer.num_available - 1
-        new_num_consumed = current_beer.num_consumed + 1
-        current_beer.update(num_available: new_num_available, num_consumed: new_num_consumed, rating: rating)
-        puts "🍻 Cheers! You now have #{current_beer.num_available} #{beer.name}s left 🍻"
+        rating = self.update_rating(beer)
+        current_cbeer = self.consumer_beers.find_by(beer_id: beer.id)
+        new_num_available = current_cbeer.num_available - 1
+        new_num_consumed = current_cbeer.num_consumed + 1
+        current_cbeer.update(num_available: new_num_available, num_consumed: new_num_consumed, rating: rating)
+        puts "🍻 Cheers! You now have #{current_cbeer.num_available} #{beer.name}s left 🍻"
     end
 
     # see other users info
