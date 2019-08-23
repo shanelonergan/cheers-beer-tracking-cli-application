@@ -3,6 +3,11 @@ class Beer < ActiveRecord::Base
     has_many :consumer_beers, dependent: :destroy
     has_many :consumers, through: :consumer_beers
 
+    @@beer_styles = ["Gose", "IPA", "Lager", "Pilsner", "Porter", "Sour", "Stout", "White Ale"]
+
+    def self.beer_styles
+      @@beer_styles
+    end
 
     def average_rating
         #returns the average rating of all consumer_beer instances of this beer

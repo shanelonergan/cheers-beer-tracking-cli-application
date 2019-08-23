@@ -5,7 +5,7 @@ class Brewery < ActiveRecord::Base
     #User Interface
 
     def self.handle_returning_brewery
-        name = TTY::Prompt.new.select("Select your brewery:", Brewery.pluck(:name))
+        name = TTY::Prompt.new.select("Select your brewery:", Brewery.pluck(:name), per_page: 10)
         Brewery.find_by(name: name)
     end
 
@@ -13,15 +13,7 @@ class Brewery < ActiveRecord::Base
         name = TTY::Prompt.new.ask("Welcome to our program! What is your brewery's name?").capitalize
         location = TTY::Prompt.new.ask("Where are you located?").capitalize
         year_founded = TTY::Prompt.new.ask("What year were you founded?") { |q| q.in('1000-3000') }
-        specialty = TTY::Prompt.new.select("What style do you specialize in?",
-          ["Gose",
-          "IPA",
-          "Lager",
-          "Pilsner",
-          "Porter",
-          "Sour",
-          "Stout",
-          "White Ale"])
+        specialty = TTY::Prompt.new.select("What style do you specialize in?", Beer.beer_styles, per_page: 8)
         Brewery.create(name: name, location: location, year_founded: year_founded, specialty: specialty)
     end
 
@@ -130,15 +122,7 @@ class Brewery < ActiveRecord::Base
 
     def add_beer
         name = TTY::Prompt.new.ask("What is your new beer's name?")
-        style = TTY::Prompt.new.select("What style is this beer?",
-        ["Gose",
-        "IPA",
-        "Lager",
-        "Pilsner",
-        "Porter",
-        "Sour",
-        "Stout",
-        "White Ale"])
+        style = TTY::Prompt.new.select("What style is this beer?", Beer.beer_styles, per_page: 8)
         abv = TTY::Prompt.new.ask("What is the ABV content?") { |q| q.in('0-100') }
         new_beer = Beer.create(name: name, style: style, abv: abv, brewery: self)
         puts "\n#{new_beer.name} has been added to your menu!"
