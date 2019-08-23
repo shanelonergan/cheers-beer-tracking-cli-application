@@ -57,8 +57,9 @@ class Consumer < ActiveRecord::Base
     end
 
     def beer_consumption
-        beer_consumed = self.consumer_beers.sort_by { |beer| beer.num_consumed }.reverse
-        beer_consumed.map {|consumer_beer| "#{consumer_beer.beer.name} from #{consumer_beer.brewery.name}: #{consumer_beer.num_consumed} drank"}
+        beers_consmed_with_ratings = self.consumer_beers.where.not(rating: nil)
+        beer_consumed = beers_consmed_with_ratings.sort_by { |beer| beer.num_consumed }.reverse
+        beer_consumed.map {|consumer_beer| "#{consumer_beer.beer.name} from #{consumer_beer.brewery.name}: #{consumer_beer.rating}/5;  #{consumer_beer.num_consumed} drank"}
     end
 
     def beer_ratings
@@ -98,6 +99,9 @@ class Consumer < ActiveRecord::Base
 
     #Acquire Beer
 
+    def rate_beer #helper
+      TTY::Prompt.new.ask("Rate this beer from 0-5") { |q| q.in('0-5') }
+    end
 
     def buy_drink_beer
         TTY::Prompt.new.select("Buy or drink beer?") do |menu|
@@ -145,7 +149,7 @@ class Consumer < ActiveRecord::Base
         # creates new ConsumerBeer instance with num_consumed = 1 and num_available = 0
         # or increases num_consumed by 1 for existing ConsumerBeer instance
         if !self.consumer_beers.find_by(beer_id: beer.id)
-            rating = TTY::Prompt.new.ask("Rate this beer from 0-5") { |q| q.in('0-5') }
+            rating = self.rate_beer
             ConsumerBeer.create(beer_id: beer.id, consumer_id: self.id, num_available: 0, num_consumed: 1, rating: rating)
         else
             current_cbeer = self.consumer_beers.find_by(beer_id: beer.id)
@@ -219,9 +223,7 @@ class Consumer < ActiveRecord::Base
     end
 
     def view_brewery_menu(brewery)
-        puts "\n"
-        puts "#{brewery.name}'s Beer Menu"
-        puts "\n"
+        puts "\n#{brewery.name}'s Beer Menu\n\n"
         if brewery.beers == []
           puts "#{brewery.name} has no beers"
         else
@@ -243,23 +245,17 @@ class Consumer < ActiveRecord::Base
     end
 
     def print_most_popular(brewery)
-        puts "\n"
-        puts "Most Popular Beer:"
-        puts "\n"
-        puts "#{brewery.most_popular[0].name}"
+        puts "\nMost Popular Beer:"
+        puts "#{brewery.most_popular[0].name}, #{brewery.most_popular[0].style}"
     end
 
     def print_brewery_rating(brewery)
-        puts "\n"
-        puts "#{brewery.name}'s Consumer Rating:"
-        puts "\n"
+        puts "\n#{brewery.name}'s Consumer Rating:"
         puts "#{brewery.brewery_rating}/5"
     end
 
     def print_beers_sold(brewery)
-        puts "\n"
-        puts "Beer Sales:"
-        puts "\n"
+        puts "\nBeer Sales:"
         brewery.sold_beer_count.each do |beer, num_sold|
             puts "#{beer.name}: #{num_sold} sold"
         end
