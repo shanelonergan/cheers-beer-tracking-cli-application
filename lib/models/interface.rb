@@ -49,11 +49,11 @@ class Interface
     system "clear"
     puts self.consumer.name
     prompt.select("Hello #{self.consumer.name}, what would you like to do today?") do |menu|
-      menu.choice "See my Beer Profile", -> {self.consumer.beer_profile}
+      menu.choice "See my beer profile", -> {self.consumer.beer_profile}
       menu.choice "Buy/drink some beer", -> {self.consumer.buy_drink_beer}
       menu.choice "See what others are drinking", -> {self.consumer.view_other_users}
       menu.choice "Explore breweries", -> {self.consumer.view_breweries}
-      menu.choice "Delete Account", -> {self.consumer.delete_account}
+      menu.choice "Delete account", -> {self.consumer.delete_account}
       menu.choice "Exit", ->{self.exit_app}
     end
   end

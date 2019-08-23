@@ -56,15 +56,21 @@ class Consumer < ActiveRecord::Base
         end
     end
 
+    def rated_beers
+        self.consumer_beers.where.not(rating: nil)
+    end
+
+    def sort_beers(attribute) #helper
+        rated_beers.sort_by { |beer| beer.send(attribute) }.reverse
+    end
+
     def beer_consumption
-        beers_consmed_with_ratings = self.consumer_beers.where.not(rating: nil)
-        beer_consumed = beers_consmed_with_ratings.sort_by { |beer| beer.num_consumed }.reverse
+        beer_consumed = sort_beers(:num_consumed)
         beer_consumed.map {|consumer_beer| "#{consumer_beer.beer.name} from #{consumer_beer.brewery.name}: #{consumer_beer.rating}/5;  #{consumer_beer.num_consumed} drank"}
     end
 
     def beer_ratings
-        beers_with_rating = self.consumer_beers.where.not(rating: nil)
-        beer_rating = beers_with_rating.sort_by { |beer| beer.rating }.reverse
+        beer_rating = sort_beers(:rating)
         beer_rating.map {|consumer_beer| "#{consumer_beer.beer.name}: #{consumer_beer.rating}"}
     end
 
@@ -110,14 +116,18 @@ class Consumer < ActiveRecord::Base
         end
     end
 
-    def choose_beer_to_buy
-        # add to num_available if ConsumerBeer instance exists or create new one
+    def choose_beer
         breweries_with_beers = Brewery.all.select {|brewery| brewery.beers != []}
         brewery_choice = TTY::Prompt.new.select("What brewery?", breweries_with_beers.pluck(:name))
         beer_choice = TTY::Prompt.new.select("What beer?", Brewery.find_by(name: brewery_choice).beers.pluck(:name))
-        beer = Beer.find_by(name: beer_choice)
+        Beer.find_by(name: beer_choice)
+    end
+
+    def choose_beer_to_buy
+        # add to num_available if ConsumerBeer instance exists or create new one
+        chosen_beer = self.choose_beer
         quantity = TTY::Prompt.new.ask("How many?").to_i
-        buy_beer(beer, quantity)
+        buy_beer(chosen_beer, quantity)
     end
 
     def buy_beer(chosen_beer, chosen_quantity)
@@ -138,10 +148,7 @@ class Consumer < ActiveRecord::Base
     end
 
     def choose_beer_from_brewery
-        breweries_with_beers = Brewery.all.select {|brewery| brewery.beers != []}
-        brewery_choice = TTY::Prompt.new.select("What brewery?", breweries_with_beers.pluck(:name))
-        beer_choice = TTY::Prompt.new.select("What beer?", Brewery.find_by(name: brewery_choice).beers.pluck(:name))
-        chosen_beer = Beer.find_by(name: beer_choice)
+        chosen_beer = self.choose_beer
         drink_beer_from_brewery(chosen_beer)
     end
 
@@ -154,11 +161,11 @@ class Consumer < ActiveRecord::Base
         else
             current_cbeer = self.consumer_beers.find_by(beer_id: beer.id)
             if !current_cbeer.rating
-                rating = TTY::Prompt.new.ask("Rate this beer from 0-5") { |q| q.in('0-5') }
+                rating = self.rate_beer
             else
                 update_rating = TTY::Prompt.new.select("Do you want to change your current rating of #{current_cbeer.rating}?", ["Yes", "No"])
                 if update_rating == "Yes"
-                    rating = TTY::Prompt.new.ask("Rate this beer from 0-5") { |q| q.in('0-5') }
+                    rating = self.rate_beer
                 else
                     rating = current_cbeer.rating
                 end
@@ -185,11 +192,11 @@ class Consumer < ActiveRecord::Base
         # finds ConsumerBeer instance, increases num_consumed by 1, decreases num_available by 1
         current_beer = self.consumer_beers.find_by(beer_id: beer.id)
         if !current_beer.rating
-            rating = TTY::Prompt.new.ask("Rate this beer from 0-5") { |q| q.in('0-5') }
+            rating = self.rate_beer
         else
             update_rating = TTY::Prompt.new.select("Do you want to change your current rating of #{current_beer.rating}?", ["Yes", "No"])
             if update_rating == "Yes"
-                rating = TTY::Prompt.new.ask("Rate this beer from 0-5") { |q| q.in('0-5') }
+                rating = self.rate_beer
             else
                 rating = current_beer.rating
             end
