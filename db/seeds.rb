@@ -101,4 +101,4 @@ skb5 = ConsumerBeer.create(beer_id: fb_lager.id, consumer_id: sukrit.id, num_ava
 # yuengling_golden = Beer.create(brewery_id: yuengling.id, name: "Yuengling Golden Pilsner", style: "Pilsner", additions: "", abv: 4.7)
 # yuengling_lager = Beer.create(brewery_id: yuengling.id, name: "Yuengling Traditional Lager", style: "Lager", additions: "", abv: 4.5)
 
-puts "gettin' drunk"
+puts "🍻 gettin' drunk 🍻"

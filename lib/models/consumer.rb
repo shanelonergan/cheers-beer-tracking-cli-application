@@ -177,6 +177,8 @@ class Consumer < ActiveRecord::Base
             new_num = self.consumer_beers.find_by(beer_id: beer.id).num_consumed + 1
             self.consumer_beers.find_by(beer_id: beer.id).update(num_consumed: new_num, rating: rating)
         end
+
+        puts "\n🍻 Cheers! 🍻"
     end
 
     def choose_beer_from_fridge
@@ -198,7 +200,7 @@ class Consumer < ActiveRecord::Base
         new_num_available = current_cbeer.num_available - 1
         new_num_consumed = current_cbeer.num_consumed + 1
         current_cbeer.update(num_available: new_num_available, num_consumed: new_num_consumed, rating: rating)
-        puts "🍻 Cheers! You now have #{current_cbeer.num_available} #{beer.name}s left 🍻"
+        puts "\n🍻 Cheers! You now have #{current_cbeer.num_available} #{beer.name}s left 🍻"
     end
 
     # see other users info
